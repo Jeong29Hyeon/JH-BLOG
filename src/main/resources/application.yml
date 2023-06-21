@@ -4,4 +4,11 @@ spring:
     username: root
     password: java
     driver-class-name: com.mysql.cj.jdbc.Driver
-
+mybatis:
+  configuration:
+    map-underscore-to-camel-case: true
+  type-aliases-package: com.study.blog.domain
+  mapper-locations: classpath:mybatis/mapper/*.xml
+logging:
+  level:
+    web: debug

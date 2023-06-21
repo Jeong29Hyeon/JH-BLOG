@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.study.blog.mapper.PostMapper">
+    <!-- post 테이블 전체 컬럼 -->
+    <sql id="postColumns">
+        id
+        , title
+        , content
+        , view_cnt
+        , notice_yn
+        , delete_yn
+        , created_date
+        , modified_date
+    </sql>
+
+    <!-- 포스트 저장 -->
+    <insert id="save" parameterType="PostRequest" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO post (
+        <include refid="postColumns" />
+        ) VALUES (
+        #{id}
+        , #{title}
+        , #{content}
+        , 0
+        , #{noticeYn}
+        , 0
+        , NOW()
+        , NULL
+        )
+    </insert>
+
+    <!-- 게시글 상세정보 조회 -->
+    <select id="findById" parameterType="long" resultType="PostResponse">
+        SELECT
+        <include refid="postColumns" />
+        FROM
+        post
+        WHERE
+        id = #{id}
+    </select>
+
+    <!-- 게시글 수정 -->
+    <update id="update" parameterType="PostRequest">
+        UPDATE post
+        SET
+            modified_date = NOW()
+          , title = #{title}
+          , content = #{content}
+          , notice_yn = #{noticeYn}
+        WHERE
+            id = #{id}
+    </update>
+
+    <!-- 게시글 삭제 -->
+    <delete id="deleteById" parameterType="long">
+        UPDATE post
+        SET
+            delete_yn = 1
+        WHERE
+            id = #{id}
+    </delete>
+
+    <!-- 게시글 리스트 조회 -->
+    <select id="findAll" resultType="PostResponse">
+        SELECT
+        <include refid="postColumns" />
+        FROM
+        post
+        WHERE
+        delete_yn = 0
+        ORDER BY
+        id DESC
+    </select>
+</mapper>

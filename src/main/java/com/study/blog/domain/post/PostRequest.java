@@ -10,6 +10,7 @@ public class PostRequest {
     private String title;        // 제목
     private String description;  // 포스트 설명
     private String content;      // 내용
+    private String thumbnail;    // 썸네일 저장 이름
 
     @Builder
     public PostRequest(Long id, String title, String description, String content) {
@@ -18,4 +19,5 @@ public class PostRequest {
         this.description = description;
         this.content = content;
     }
+
 }

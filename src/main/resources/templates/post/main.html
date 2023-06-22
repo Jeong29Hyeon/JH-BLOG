@@ -26,32 +26,55 @@
 <!--Main Navigation-->
 
         <th:block layout:fragment="content">
+            <div class="input-group rounded my-3">
+                <div class="col-3 me-1">
+                    <select class="form-select rounded" id="searchType" name="searchType" title="검색 유형 선택">
+                        <option value="">전체 검색</option>
+                        <option value="title">제목</option>
+                        <option value="content">내용</option>
+                    </select>
+                </div>
+                <div class="col-8 d-flex">
+                    <div class="input-group">
+                        <div class="form-outline">
+                            <input type="search" id="keyword" name="keyword" class="form-control" />
+                            <label class="form-label" for="keyword">Search</label>
+                        </div>
+                        <button type="button" class="btn btn-primary">
+                            <i class="fas fa-search"></i>
+                        </button>
+                        <button type="button" class="btn btn-secondary" onclick="location.href='/post/list'">
+                            <i class="fa fa-undo"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <!-- 글 쓰기 버튼 -->
+            <p class="my-1 d-flex flex-row-reverse"><a th:href="@{/post/write}" class="btn btn-outline-info">글쓰기</a></p>
             <section class="text-center">
                 <!-- Post -->
-                <div th:if="${posts} == null">
+                <div th:if="${posts.isEmpty()}">
                     <h3>포스트가 존재하지 않습니다.</h3>
                 </div>
-                <div class="row row-cols-md-2 row-cols-lg-3" th:each="post : ${posts}">
-                    <div class="col-lg-4 col-md-6 mb-4">
+                <div class="row row-cols-md-2 row-cols-lg-2">
+                    <div class="col-lg-6 col-md-6 mb-4" th:each="post : ${posts}">
                         <div class="card">
                             <div class="bg-image hover-overlay ripple" data-mdb-ripple-color="light">
                                 <img src="https://mdbootstrap.com/img/new/standard/nature/184.jpg" class="img-fluid" />
-                                <a href="#!">
+                                <a href="#">
                                     <div class="mask" style="background-color: rgba(251, 251, 251, 0.15);"></div>
                                 </a>
                             </div>
                             <div class="card-body">
                                 <h5 class="card-title" th:text="${post.title}">Post title</h5>
-                                <p class="card-text">
-                                    Some quick example text to build on the card title and make up the bulk of the
-                                    card's content.
-                                </p>
-                                <a href="#!" class="btn btn-primary">보러 가기</a>
+                                <p class="card-text text-muted" th:text="${post.description}"></p>
+                                <a th:href="@{/post/view(id=${post.id})}" class="btn btn-outline-primary">보러 가기</a>
                             </div>
                         </div>
                     </div>
                 </div>
             </section>
+
             <!-- Pagination -->
             <nav class="my-4" aria-label="...">
                 <ul class="pagination pagination-circle justify-content-center">

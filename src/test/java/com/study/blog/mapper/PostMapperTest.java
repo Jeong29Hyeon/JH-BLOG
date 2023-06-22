@@ -27,7 +27,6 @@ class PostMapperTest {
         PostRequest postRequest = PostRequest.builder()
                 .title("제목1")
                 .content("내용1")
-                .noticeYn(false)
                 .build();
         //when
         postMapper.save(postRequest);
@@ -46,7 +45,6 @@ class PostMapperTest {
                 .id(1L)
                 .title("제목1수정")
                 .content("내용1수정")
-                .noticeYn(true)
                 .build();
         //when
         postMapper.update(post);

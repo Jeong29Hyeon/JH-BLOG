@@ -9,6 +9,7 @@ public class PostResponse {
     private Long id;                       // PK
     private String title;                  // 제목
     private String description;            // 설명
+    private String thumbnail;
     private String content;                // 내용
     private int viewCnt;                   // 조회 수
     private Boolean deleteYn;              // 삭제 여부

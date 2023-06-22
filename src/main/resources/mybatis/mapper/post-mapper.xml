@@ -7,6 +7,7 @@
         id
         , title
         , description
+        , thumbnail
         , content
         , view_cnt
         , delete_yn
@@ -16,8 +17,8 @@
 
     <!-- 포스트 저장 -->
     <insert id="save" parameterType="PostRequest" useGeneratedKeys="true" keyProperty="id">
-        INSERT INTO post (title,description,content,view_cnt, delete_yn, created_date,modified_date)
-        VALUES (#{title}, #{description}, #{content}, 0, 0, NOW(), NULL)
+        INSERT INTO post (title,description,thumbnail,content,view_cnt, delete_yn, created_date,modified_date)
+        VALUES (#{title}, #{description},#{thumbnail}, #{content}, 0, 0, NOW(), NULL)
     </insert>
 
     <!-- 게시글 상세정보 조회 -->
@@ -37,6 +38,7 @@
             modified_date = NOW()
           , title = #{title}
           , description = #{description}
+          , thumbnail = #{thumbnail}
           , content = #{content}
         WHERE
             id = #{id}

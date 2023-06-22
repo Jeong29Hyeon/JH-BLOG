@@ -28,6 +28,10 @@
                    maxlength="50">
                </div>
                <div>
+                   <label for="image" class="me-3">썸네일 추가 : </label>
+                   <input type="file" class="form-file-button" id="image" name="image">
+               </div>
+               <div>
                    <label for="editor">내용</label>
                    <!-- Toast ui 들어갈 부분 -->
                    <div id="editor">
@@ -109,7 +113,7 @@
                 return false;
             }
             const form = document.getElementById("saveForm");
-            const fields = ['id', 'title'];
+            const fields = ['id', 'title','description'];
             fields.forEach(field => {
                 form[field].value = post[field];
             })
@@ -133,9 +137,30 @@
                 form.description.focus();
                 return false;
             }
-            document.getElementById('saveBtn').disabled = true;
-            form.action = [[ ${post == null}]] ? '/post/save' : '/post/update';
-            form.submit();
+            let formData = new FormData(form);
+            const url = [[ ${post == null}]] ? '/post/save' : '/post/update';
+            console.log(url);
+            console.log(formData.get("image"));
+            console.log(formData.get("id"));
+            console.log(formData.get("title"));
+            console.log(formData.get("content"));
+            $.ajax({
+                url: url,
+                type: 'post',
+                enctype: 'multipart/form-data',
+                data: formData,
+                cache: false,
+                processData : false,
+                contentType : false,
+                dataType : 'json',
+                success : function (response) {
+                    alert(response.msg);
+                    location.href = `/post/view?id=${response.id}`
+                },
+                error : function (jqXHR) {
+                    alert(jqXHR.responseJSON.errorMsg);
+                }
+            })
         }
 
         //게시글 리스트로 이동

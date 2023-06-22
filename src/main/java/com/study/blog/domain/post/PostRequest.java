@@ -10,14 +10,12 @@ public class PostRequest {
     private String title;        // 제목
     private String description;  // 포스트 설명
     private String content;      // 내용
-    private Boolean noticeYn;    // 공지글 여부
 
     @Builder
-    public PostRequest(Long id, String title, String description, String content, Boolean noticeYn) {
+    public PostRequest(Long id, String title, String description, String content) {
         this.id = id;
         this.title = title;
         this.description = description;
         this.content = content;
-        this.noticeYn = noticeYn;
     }
 }

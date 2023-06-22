@@ -3,7 +3,7 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
 <body th:fragment="main-body">
 <!--Main Navigation-->
-<header>
+<header class="mb-5">
     <!-- Navbar -->
     <nav class="navbar navbar-expand-lg navbar-light bg-white fixed-top">
         <div class="container-fluid">
@@ -43,16 +43,9 @@
             </div>
         </div>
     </nav>
-    <!-- Jumbotron -->
-    <div id="intro" class="p-5 text-center bg-light">
-        <h1 class="mb-3 h2">Learn Bootstrap 5 with MDB</h1>
-        <p class="mb-3">Best & free guide of responsive web design</p>
-        <a class="btn btn-primary m-2" href="https://www.youtube.com/watch?v=c9B4TPnak1A" role="button" rel="nofollow"
-           target="_blank">Start tutorial</a>
-        <a class="btn btn-primary m-2" href="https://mdbootstrap.com/docs/standard/" target="_blank"
-           role="button">Download MDB UI KIT</a>
+    <div class="p-2">
+
     </div>
-    <!-- Jumbotron -->
 </header>
     <!-- Navbar -->
 <!--Main layout-->
@@ -116,7 +109,8 @@
     정현's 블로그
 </div>
 <!-- Copyright -->
-<script th:src="@{js/mdb.min.js}"></script>
+<script th:src="@{/js/mdb.min.js}"></script>
+<script src="https://cdn.jsdelivr.net/npm/dayjs@1/dayjs.min.js"></script>
 <th:block layout:fragment="add-javascript"></th:block>
 </body>
 </html>

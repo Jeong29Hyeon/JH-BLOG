@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/BlogLayout}">
+<th:block layout:fragment="title">
+    <title th:text="${post.title}"></title>
+</th:block>
+<th:block layout:fragment="add-css">
+    <!-- Toast Ui -->
+    <link rel="stylesheet" href="https://uicdn.toast.com/editor/latest/toastui-editor.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism.min.css"/>
+    <link rel="stylesheet" href="https://uicdn.toast.com/editor-plugin-code-syntax-highlight/latest/toastui-editor-plugin-code-syntax-highlight.min.css"/>
+    <link rel="stylesheet" href="https://uicdn.toast.com/tui-color-picker/latest/tui-color-picker.min.css"/>
+    <link rel="stylesheet" href="https://uicdn.toast.com/editor-plugin-color-syntax/latest/toastui-editor-plugin-color-syntax.min.css"/>
+</th:block>
+<th:block layout:fragment="content">
+    <section class="my-3">
+        <h1 class="text-center" th:text="${post.title}"></h1>
+        <div class="d-flex flex-column gap-2 my-4">
+            <p class="d-flex align-items-center">
+                <span class="fw-bold me-1">정현 ·</span><span style="font-size: 13px" th:text="${#temporals.format(post.createdDate,'yyyy년 M월 d일 HH시 mm분')}"></span>
+            </p>
+        </div>
+        <div id="viewer" class="mx-2"></div>
+        <div class="d-flex gap-3 mt-4">
+            <button type="button" onclick="goListPage();" class="btn btn-secondary me-auto">뒤로</button>
+            <button type="button" onclick="goWritePage();" class="btn btn-primary">수정</button>
+            <button type="button" onclick="deletePost();" class="btn btn-danger">삭제</button>
+        </div>
+    </section>
+</th:block>
+
+<th:block layout:fragment="add-javascript">
+    <!-- Color Picker -->
+    <script src="https://uicdn.toast.com/tui-color-picker/latest/tui-color-picker.min.js"></script>
+    <script src="https://uicdn.toast.com/editor/latest/toastui-editor-all.min.js"></script>
+    <!-- Editor's Plugin -->
+    <script src="https://uicdn.toast.com/editor-plugin-code-syntax-highlight/latest/toastui-editor-plugin-code-syntax-highlight-all.min.js"></script>
+    <script src="https://uicdn.toast.com/editor-plugin-color-syntax/latest/toastui-editor-plugin-color-syntax.min.js"></script>
+    <script th:inline="javascript">
+        /*<![CDATA[*/
+        const { Editor } = toastui;
+        const { codeSyntaxHighlight, colorSyntax } = Editor.plugin;
+        window.onload = () => {
+            createContent();
+        }
+
+        function createContent() {
+            const content = [[${post.content}]];
+            const viewer = Editor.factory({
+                el: document.querySelector('#viewer'),
+                viewer: true,
+                height: '500px',
+                initialValue: content,
+                plugins: [codeSyntaxHighlight, colorSyntax]
+            });
+        }
+
+        function goWritePage() {
+            location.href = '/post/write' + location.search;
+        }
+
+        function deletePost() {
+            const id = [[${post.id}]];
+            if(!confirm(id +'번 포스트를 삭제할까요?')) {
+                return false;
+            }
+            let inputHtml = '';
+            new URLSearchParams(location.search).forEach((value, key) => {
+                inputHtml += `<input type='hidden' name='${key}' value='${value}'/>`;
+            })
+
+            const formHtml = `<form id="deleteForm" action="/post/delete" method="post">
+                                ${inputHtml}
+                              </form>`;
+            const doc = new DOMParser().parseFromString(formHtml, 'text/html');
+            const form = doc.body.firstChild;
+            document.body.append(form);
+            document.getElementById('deleteForm').submit();
+        }
+
+        // 게시글 리스트 페이지로 이동
+        function goListPage() {
+            const queryString = new URLSearchParams(location.search);
+            queryString.delete('id');
+            queryString.delete('commentPage');
+            location.href = '/post' + '?' + queryString.toString();
+        }
+        /*]]>*/
+    </script>
+</th:block>
+</html>

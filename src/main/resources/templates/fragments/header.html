@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head th:fragment="main-head">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+
+    <th:block layout:fragment="title"></th:block>
+
+    <link rel="stylesheet" th:href="@{/css/mdb.min.css}" />
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet"/>
+
+    <style>
+        @font-face {
+            font-family: 'NanumSquareNeo-Variable';
+            src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_11-01@1.0/NanumSquareNeo-Variable.woff2') format('woff2');
+            font-weight: normal;
+            font-style: normal;
+        }
+        body {
+            font-family: 'NanumSquareNeo-Variable', sans-serif;
+        }
+    </style>
+    <th:block layout:fragment="add-css"></th:block>
+</head>
+</html>

@@ -6,6 +6,7 @@
     <sql id="postColumns">
         id
         , title
+        , description
         , content
         , view_cnt
         , notice_yn
@@ -16,10 +17,11 @@
 
     <!-- 포스트 저장 -->
     <insert id="save" parameterType="PostRequest" useGeneratedKeys="true" keyProperty="id">
-        INSERT INTO post (title, content,view_cnt, notice_yn, delete_yn, created_date,modified_date)
+        INSERT INTO post (title,description,content,view_cnt, notice_yn, delete_yn, created_date,modified_date)
         VALUES (
          #{title}
         , #{content}
+        , #{description}
         , 0
         , #{noticeYn}
         , 0
@@ -44,6 +46,7 @@
         SET
             modified_date = NOW()
           , title = #{title}
+          , description = #{description}
           , content = #{content}
           , notice_yn = #{noticeYn}
         WHERE

@@ -8,6 +8,7 @@ import java.time.LocalDateTime;
 public class PostResponse {
     private Long id;                       // PK
     private String title;                  // 제목
+    private String description;            // 설명
     private String content;                // 내용
     private int viewCnt;                   // 조회 수
     private Boolean noticeYn;              // 공지글 여부

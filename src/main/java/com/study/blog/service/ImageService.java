@@ -14,7 +14,7 @@ public class ImageService {
     private final String path = "c://upload/blog/image";
 
     public String uploadImage(MultipartFile file) {
-        if(file.isEmpty()) {
+        if(file == null || file.isEmpty()) {
             return null;
         }
         String originalFilename = file.getOriginalFilename();
@@ -53,4 +53,10 @@ public class ImageService {
     }
 
 
+    public void deleteImage(String fileName) {
+        File deleteFile = new File(path,fileName);
+        if(deleteFile.exists()) {
+            deleteFile.delete();
+        }
+    }
 }

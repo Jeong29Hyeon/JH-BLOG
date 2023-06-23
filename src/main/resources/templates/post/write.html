@@ -27,9 +27,13 @@
                    <input id="description" name="description" type="text" class="form-control" placeholder="이 포스트를 간단하게 표현해봐요!"
                    maxlength="50">
                </div>
-               <div>
+               <div th:if="${post == null}">
                    <label for="image" class="me-3">썸네일 추가 : </label>
                    <input type="file" class="form-file-button" id="image" name="image">
+               </div>
+               <div th:unless="${post == null}" id="thumbnailDiv">
+                    <button type="button" id="changeThumbnail" class="btn btn-outline-secondary"
+                    onclick="addFileInput()">썸네일 변경</button>
                </div>
                <div>
                    <label for="editor">내용</label>
@@ -159,6 +163,7 @@
                 },
                 error : function (jqXHR) {
                     alert(jqXHR.responseJSON.errorMsg);
+                    console.log(jqXHR.responseJSON)
                 }
             })
         }
@@ -166,6 +171,13 @@
         //게시글 리스트로 이동
         function goListPage() {
             location.href = '/post';
+        }
+
+        //글 수정 페이지에서 썸네일변경 버튼을 누르면 file Input을 생성한다.
+        function addFileInput() {
+            const thumbnailDiv = document.getElementById("thumbnailDiv");
+            thumbnailDiv.innerHTML = `<label for="image" class="me-3">썸네일 변경 : </label>
+                   <input type="file" class="form-file-button" id="image" name="image">`;
         }
     </script>
 </th:block>

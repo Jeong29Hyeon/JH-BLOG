@@ -2,6 +2,8 @@ package com.study.blog.controller;
 
 import com.study.blog.domain.post.PostRequest;
 import com.study.blog.domain.post.PostResponse;
+import com.study.blog.mapper.PostTagMapper;
+import com.study.blog.service.HashtagService;
 import com.study.blog.service.ImageService;
 import com.study.blog.service.PostService;
 import lombok.RequiredArgsConstructor;
@@ -22,10 +24,13 @@ import java.util.Objects;
 public class PostController {
     private final PostService postService;
     private final ImageService imageService;
+    private final PostTagMapper postTagMapper;
+    private final HashtagService hashtagService;
 
     @GetMapping()
     public String openBlog(Model model) {
         model.addAttribute("posts",postService.findAllPost());
+        model.addAttribute("hashtags",hashtagService.findAll());
         return "post/main";
     }
 
@@ -34,7 +39,9 @@ public class PostController {
                                 Model model) {
         if(id != null) {
             PostResponse findPost = postService.findPostById(id);
+            List<String> hashtags = postTagMapper.findNameByPostId(id);
             model.addAttribute("post",findPost);
+            model.addAttribute("hashtags",hashtags);
         }
         return "post/write";
     }
@@ -44,7 +51,7 @@ public class PostController {
     public ResponseEntity<Map<String, String>> savePost(
             @RequestParam(value = "image", required = false)MultipartFile file,
             final PostRequest postRequest,
-            @RequestParam(value = "tagNames",required = false) List<String> tagNames){
+            @RequestParam(value = "hashtags",required = false) List<String> tagNames){
         Map<String,String> response = new HashMap<>();
         String saveFileName = null;
         try {
@@ -65,6 +72,7 @@ public class PostController {
     public String viewPost(@RequestParam("id") final Long id, Model model) {
         PostResponse findPost = postService.findPostById(id);
         model.addAttribute("post",findPost);
+        model.addAttribute("hashtags",postTagMapper.findNameByPostId(id));
         return "post/view";
     }
 
@@ -79,7 +87,7 @@ public class PostController {
     public ResponseEntity<Map<String,String>> updatePost(
             @RequestParam(value = "image", required = false)MultipartFile file,
             final PostRequest postRequest,
-            @RequestParam(value = "tagNames",required = false) List<String> tagNames) {
+            @RequestParam(value = "hashtags",required = false) List<String> tagNames) {
         Map<String,String> response = new HashMap<>();
         String saveFileName = null;
         try {

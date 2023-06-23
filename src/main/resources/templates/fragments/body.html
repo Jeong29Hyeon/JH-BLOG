@@ -9,8 +9,9 @@
         <div class="container-fluid">
             <!-- Navbar brand -->
             <a class="navbar-brand" target="_blank" href="#">
-                <img src="https://mdbootstrap.com/img/logo/mdb-transaprent-noshadows.png" height="16" alt="" loading="lazy"
-                     style="margin-top: -3px;" />
+                <img src="https://mdbootstrap.com/img/logo/mdb-transaprent-noshadows.png" height="16" alt=""
+                     loading="lazy"
+                     style="margin-top: -3px;"/>
             </a>
             <button class="navbar-toggler" type="button" data-mdb-toggle="collapse" data-mdb-target="#navbarExample01"
                     aria-controls="navbarExample01" aria-expanded="false" aria-label="Toggle navigation">
@@ -35,7 +36,8 @@
                         </a>
                     </li>
                     <li class="nav-item me-3 me-lg-0">
-                        <a class="nav-link" href="https://github.com/Jeong29Hyeon/JH-BLOG" rel="nofollow" target="_blank">
+                        <a class="nav-link" href="https://github.com/Jeong29Hyeon/JH-BLOG" rel="nofollow"
+                           target="_blank">
                             <i class="fab fa-github"></i>
                         </a>
                     </li>
@@ -47,61 +49,31 @@
 
     </div>
 </header>
-    <!-- Navbar -->
+<!-- Navbar -->
 <!--Main layout-->
 <main class="my-5">
     <div class="container">
-        <!--Grid row-->
         <div class="row">
-            <!--Grid column-->
+            <div class="col-md-1"></div>
             <div class="col-md-9 mb-4">
                 <!--Section: Content-->
                 <th:block layout:fragment="content"></th:block>
                 <!--Section: Content-->
             </div>
-            <!--Grid column-->
-
-            <!--Grid column-->
-            <div class="col-md-3 mb-4">
+            <div class="col-md-2">
                 <!--Section: Sidebar-->
-                <section class="sticky-top" style="top: 80px;">
-                    <!--Section: Ad-->
-                    <section class="text-center border-bottom pb-4 mb-4">
-                        <div class="bg-image hover-overlay ripple mb-4">
-                            <img
-                                    src="https://mdbootstrap.com/wp-content/themes/mdbootstrap4/content/en/_mdb5/standard/about/assets/mdb5-about.webp"
-                                    class="img-fluid" />
-                            <a href="https://mdbootstrap.com/docs/standard/" target="_blank">
-                                <div class="mask" style="background-color: rgba(57, 192, 237, 0.2);"></div>
-                            </a>
+                <section class="sticky-top" style="top: 170px;">
+                    <div>
+                        태그 목록
+                        <hr>
+                        <div class="row" th:unless="${hashtags.isEmpty()}">
+                            <a th:href="@{/post (tag=${hashtag.name})}" th:each="hashtag:${hashtags}" th:text="${hashtag.name}"></a>
                         </div>
-                        <h5>Material Design for Bootstrap 5</h5>
-
-                        <p>
-                            500+ components, free templates, 1-min installation, extensive tutorial, huge
-                            community. MIT license - free for personal & commercial use
-                        </p>
-                        <a role="button" class="btn btn-primary" href="https://mdbootstrap.com/docs/standard/"
-                           target="_blank">Download for free<i class="fas fa-download ms-2"></i></a>
-                    </section>
-                    <!--Section: Ad-->
-
-                    <!--Section: Video-->
-                    <section class="text-center">
-                        <h5 class="mb-4">Learn the newest Bootstrap 5</h5>
-
-                        <div class="embed-responsive embed-responsive-16by9 shadow-4-strong">
-                            <iframe class="embed-responsive-item rounded" src="https://www.youtube.com/embed/c9B4TPnak1A"
-                                    allowfullscreen></iframe>
-                        </div>
-                    </section>
-                    <!--Section: Video-->
+                    </div>
                 </section>
                 <!--Section: Sidebar-->
             </div>
-            <!--Grid column-->
         </div>
-        <!--Grid row-->
     </div>
 </main>
 <!-- Copyright -->
@@ -112,6 +84,9 @@
 <script th:src="@{/js/mdb.min.js}"></script>
 <script th:src="@{/js/jquery-3.6.0.min.js}"></script>
 <script src="https://cdn.jsdelivr.net/npm/dayjs@1/dayjs.min.js"></script>
+<!--해시태그 라이브러리-->
+<script src="https://cdn.jsdelivr.net/npm/@yaireo/tagify"></script>
+<script src="https://cdn.jsdelivr.net/npm/@yaireo/tagify/dist/tagify.polyfills.min.js"></script>
 <th:block layout:fragment="add-javascript"></th:block>
 </body>
 </html>

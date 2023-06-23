@@ -27,6 +27,11 @@
                    <input id="description" name="description" type="text" class="form-control" placeholder="이 포스트를 간단하게 표현해봐요!"
                    maxlength="50">
                </div>
+               <div>
+                   <label for="hashtag">해시태그 입력</label>
+                   <input id="hashtag" name="hashtag" th:if="${hashtags.isEmpty()}">
+                   <input id="hashtag" name="hashtag" th:unless="${hashtags.isEmpty()}" th:value="${#strings.listJoin(hashtags,',')}">
+               </div>
                <div th:if="${post == null}">
                    <label for="image" class="me-3">썸네일 추가 : </label>
                    <input type="file" class="form-file-button" id="image" name="image">
@@ -65,6 +70,11 @@
             editor = createEditor();
             renderPostInfo();
         }
+
+        // 해시태그 라이브러리 Tagify 사용
+        const input = document.getElementById('hashtag');
+        let tagify = new Tagify(input);
+
 
         function createEditor() {
             const post = [[${post}]];
@@ -142,12 +152,15 @@
                 return false;
             }
             let formData = new FormData(form);
+            tagify.value.forEach((v) => {
+                formData.append('hashtags',v.value)
+            })
             const url = [[ ${post == null}]] ? '/post/save' : '/post/update';
-            console.log(url);
-            console.log(formData.get("image"));
-            console.log(formData.get("id"));
-            console.log(formData.get("title"));
-            console.log(formData.get("content"));
+            let imageInput = document.getElementById("image"); // 파일을 선택하지 않았다면 인풋을 지운다.
+            if(!imageInput) {
+                formData.delete("image");
+            }
+
             $.ajax({
                 url: url,
                 type: 'post',
@@ -179,6 +192,8 @@
             thumbnailDiv.innerHTML = `<label for="image" class="me-3">썸네일 변경 : </label>
                    <input type="file" class="form-file-button" id="image" name="image">`;
         }
+
+
     </script>
 </th:block>
 </html>

@@ -18,11 +18,6 @@
                 margin-top: 45px;
             }
         }
-        .card-body {  /*넘치는 텍스트는 ...으로 표시됨 */
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-        }
     </style>
 </th:block>
 <body>
@@ -31,26 +26,28 @@
 <!--Main Navigation-->
 
 <th:block layout:fragment="content">
-    <div class="input-group rounded my-3">
-        <div class="col-3 me-1">
-            <select class="form-select rounded" id="searchType" name="searchType" title="검색 유형 선택">
-                <option value="">전체 검색</option>
-                <option value="title">제목</option>
-                <option value="content">내용</option>
-            </select>
-        </div>
-        <div class="col-8 d-flex">
-            <div class="input-group">
-                <div class="form-outline">
-                    <input type="search" id="keyword" name="keyword" class="form-control"/>
-                    <label class="form-label" for="keyword">Search</label>
+    <div class="container">
+        <div class="input-group rounded my-3">
+            <div class="col-3 me-1">
+                <select class="form-select rounded" id="searchType" name="searchType" title="검색 유형 선택">
+                    <option value="">전체 검색</option>
+                    <option value="title">제목</option>
+                    <option value="content">내용</option>
+                </select>
+            </div>
+            <div class="col-8 d-flex">
+                <div class="input-group">
+                    <div class="form-outline">
+                        <input type="search" id="keyword" name="keyword" class="form-control"/>
+                        <label class="form-label" for="keyword">Search</label>
+                    </div>
+                    <button type="button" class="btn btn-primary">
+                        <i class="fas fa-search"></i>
+                    </button>
+                    <button type="button" class="btn btn-secondary" onclick="location.href='/post/list'">
+                        <i class="fa fa-undo"></i>
+                    </button>
                 </div>
-                <button type="button" class="btn btn-primary">
-                    <i class="fas fa-search"></i>
-                </button>
-                <button type="button" class="btn btn-secondary" onclick="location.href='/post/list'">
-                    <i class="fa fa-undo"></i>
-                </button>
             </div>
         </div>
     </div>
@@ -61,30 +58,12 @@
         <div th:if="${posts.isEmpty()}">
             <h3>포스트가 존재하지 않습니다.</h3>
         </div>
-<!--        <div class="row">-->
-<!--            <div class="col-lg-4 col-md-6 mb-4" th:each="post : ${posts}">-->
-<!--                <div class="card">-->
-<!--                    <div class="bg-image hover-overlay ripple" data-mdb-ripple-color="light">-->
-<!--                        <img th:src="${post.thumbnail == null} ? '/image/default.gif':'/image/'+${post.thumbnail}"-->
-<!--                             class="img-fluid" alt="썸네일" style="height: 200px; object-fit: cover;"/>-->
-<!--                        <a th:href="@{/post/view(id=${post.id})}">-->
-<!--                            <div class="mask" style="background-color: rgba(251, 251, 251, 0.15);"></div>-->
-<!--                        </a>-->
-<!--                    </div>-->
-<!--                    <div class="card-body">-->
-<!--                        <h5 class="card-title" th:text="${post.title}">Post title</h5>-->
-<!--                        <p class="card-text text-muted" th:text="${post.description}" style="font-size: 0.8rem"></p>-->
-<!--                        <a th:href="@{/post/view(id=${post.id})}" class="btn btn-outline-primary">보러 가기</a>-->
-<!--                    </div>-->
-<!--                </div>-->
-<!--            </div>-->
-<!--        </div>-->
         <!-- Post -->
         <div class="row" th:each="post : ${posts}">
             <div class="col-md-4 mb-4">
                 <div class="bg-image hover-overlay shadow-1-strong rounded ripple" data-mdb-ripple-color="light">
                     <img th:src="${post.thumbnail == null} ? '/image/default.gif':'/image/'+${post.thumbnail}"
-                         class="img-fluid" alt="썸네일" style="height: 200px; object-fit: cover;"/>
+                         class="img-fluid" alt="썸네일"/>
                     <a th:href="@{/post/view(id=${post.id})}">
                         <div class="mask" style="background-color: rgba(251, 251, 251, 0.15);"></div>
                     </a>
@@ -94,7 +73,7 @@
             <div class="col-md-8 mb-4 d-flex flex-column">
                 <h5 th:text="${post.title}">포스트 제목</h5>
                 <p th:text="${post.description}" style="font-size: 0.8rem">
-                   포스트 설명글
+                    포스트 설명글
                 </p>
                 <div class="mt-auto">
                     <a th:href="@{/post/view(id=${post.id})}" class="btn btn-outline-primary">보러 가기</a>
@@ -121,47 +100,11 @@
         </ul>
     </nav>
 </th:block>
-
-
 <!--Main layout-->
+<th:block layout:fragment="add-javascript">
+    <script th:inline="javascript">
 
-<!--Footer-->
-<footer class="bg-light text-lg-start">
-    <div class="py-4 text-center">
-        <a role="button" class="btn btn-primary btn-lg m-2"
-           href="https://www.youtube.com/channel/UC5CF7mLQZhvx8O5GODZAhdA" rel="nofollow" target="_blank">
-            Learn Bootstrap 5
-        </a>
-        <a role="button" class="btn btn-primary btn-lg m-2" href="https://mdbootstrap.com/docs/standard/"
-           target="_blank">
-            Download MDB UI KIT
-        </a>
-    </div>
-
-    <hr class="m-0"/>
-
-    <div class="text-center py-4 align-items-center">
-        <p>Follow MDB on social media</p>
-        <a href="https://www.youtube.com/channel/UC5CF7mLQZhvx8O5GODZAhdA" class="btn btn-primary m-1" role="button"
-           rel="nofollow" target="_blank">
-            <i class="fab fa-youtube"></i>
-        </a>
-        <a href="https://www.facebook.com/mdbootstrap" class="btn btn-primary m-1" role="button" rel="nofollow"
-           target="_blank">
-            <i class="fab fa-facebook-f"></i>
-        </a>
-        <a href="https://twitter.com/MDBootstrap" class="btn btn-primary m-1" role="button" rel="nofollow"
-           target="_blank">
-            <i class="fab fa-twitter"></i>
-        </a>
-        <a href="https://github.com/mdbootstrap/mdb-ui-kit" class="btn btn-primary m-1" role="button" rel="nofollow"
-           target="_blank">
-            <i class="fab fa-github"></i>
-        </a>
-    </div>
-
-
-</footer>
-<!--Footer-->
+    </script>
+</th:block>
 </body>
 </html>

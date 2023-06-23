@@ -12,16 +12,25 @@
     <link rel="stylesheet" href="https://uicdn.toast.com/editor-plugin-code-syntax-highlight/latest/toastui-editor-plugin-code-syntax-highlight.min.css"/>
     <link rel="stylesheet" href="https://uicdn.toast.com/tui-color-picker/latest/tui-color-picker.min.css"/>
     <link rel="stylesheet" href="https://uicdn.toast.com/editor-plugin-color-syntax/latest/toastui-editor-plugin-color-syntax.min.css"/>
+    <style>
+        tags.tagify {
+            border : none;
+        }
+    </style>
 </th:block>
 <th:block layout:fragment="content">
     <section class="my-3">
         <h1 class="text-center" th:text="${post.title}"></h1>
-        <div class="d-flex flex-column gap-2 my-4">
+        <div class="d-flex flex-column gap-2 mt-4">
             <p class="d-flex align-items-center">
                 <span class="fw-bold me-1">정현 ·</span><span style="font-size: 13px" th:text="${#temporals.format(post.createdDate,'yyyy년 M월 d일 HH시 mm분')}"></span>
             </p>
         </div>
-        <div id="viewer" class="mx-2"></div>
+        <div class="mb-5">
+            해시태그: <input id="hashtag" name="hashtag"
+                         th:unless="${hashtags.isEmpty()}" th:value="${#strings.listJoin(hashtags,',')}" readonly>
+        </div>
+        <div id="viewer"></div>
         <div class="d-flex gap-3 mt-4">
             <button type="button" onclick="goListPage();" class="btn btn-secondary me-auto">뒤로</button>
             <button type="button" onclick="goWritePage();" class="btn btn-primary">수정</button>
@@ -44,6 +53,11 @@
         window.onload = () => {
             createContent();
         }
+
+        // 해시태그 라이브러리 Tagify 사용
+        const input = document.getElementById('hashtag');
+        let tagify = new Tagify(input);
+
 
         function createContent() {
             const content = [[${post.content}]];

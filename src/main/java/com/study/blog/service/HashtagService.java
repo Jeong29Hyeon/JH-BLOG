@@ -81,4 +81,8 @@ public class HashtagService {
             deleteNotUsedHashtag(tagName);
         }
     }
+
+    public List<Hashtag> findAll() {
+        return hashtagMapper.findAll();
+    }
 }

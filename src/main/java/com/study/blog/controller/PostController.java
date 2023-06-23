@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
@@ -40,8 +41,10 @@ public class PostController {
 
     @PostMapping(value = "/save", produces = "application/json;charset=UTF-8")
     @ResponseBody
-    public ResponseEntity<Map<String, String>> savePost(@RequestParam(value = "image", required = false)MultipartFile file,
-                                                        final PostRequest postRequest){
+    public ResponseEntity<Map<String, String>> savePost(
+            @RequestParam(value = "image", required = false)MultipartFile file,
+            final PostRequest postRequest,
+            @RequestParam(value = "tagNames",required = false) List<String> tagNames){
         Map<String,String> response = new HashMap<>();
         String saveFileName = null;
         try {
@@ -52,7 +55,7 @@ public class PostController {
         }
         // 이미지 파일이 없으면 default.gif 로 썸네일 잡음
         postRequest.setThumbnail(Objects.requireNonNullElse(saveFileName, "default.gif"));
-        Long id = postService.savePost(postRequest);
+        Long id = postService.savePost(postRequest,tagNames);
         response.put("msg","포스트가 저장되었습니다.");
         response.put("id", String.valueOf(id));
         return ResponseEntity.ok(response);
@@ -73,8 +76,10 @@ public class PostController {
 
     @PostMapping("/update")
     @ResponseBody
-    public ResponseEntity<Map<String,String>> updatePost(@RequestParam(value = "image", required = false)MultipartFile file,
-                                        final PostRequest postRequest) {
+    public ResponseEntity<Map<String,String>> updatePost(
+            @RequestParam(value = "image", required = false)MultipartFile file,
+            final PostRequest postRequest,
+            @RequestParam(value = "tagNames",required = false) List<String> tagNames) {
         Map<String,String> response = new HashMap<>();
         String saveFileName = null;
         try {
@@ -92,9 +97,9 @@ public class PostController {
         } else { // 이미지 파일이 없으면 썸네일 그대로 냅둬야함
             postRequest.setThumbnail(originThumbnail);
         }
-        postService.updatePost(postRequest);
+        Long id = postService.updatePost(postRequest, tagNames);
         response.put("msg","포스트가 수정되었습니다.");
-        response.put("id", String.valueOf(postRequest.getId()));
+        response.put("id", String.valueOf(id));
         return ResponseEntity.ok(response);
     }
 }

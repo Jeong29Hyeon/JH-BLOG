@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.study.blog.mapper.HashtagMapper">
+    <insert id="save" parameterType="Hashtag" useGeneratedKeys="true" keyProperty="id">
+        insert into hashtag(name) values (#{name})
+    </insert>
+    <delete id="deleteByName" parameterType="String">
+        delete from hashtag where name = #{name}
+    </delete>
+    <select id="findByName" parameterType="String" resultType="Hashtag">
+        select * from hashtag where name = #{name};
+    </select>
+</mapper>

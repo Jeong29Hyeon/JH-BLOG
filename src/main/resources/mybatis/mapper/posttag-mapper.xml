@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.study.blog.mapper.PostTagMapper">
+    <sql id="postTagColumns">
+        id
+        ,post_id
+        ,tag_id
+    </sql>
+    <insert id="save" parameterType="PostTag" keyProperty="id" useGeneratedKeys="true">
+        insert into post_tag(post_id, tag_id) values (#{postId},#{tagId})
+    </insert>
+
+    <update id="deleteByPostId" parameterType="Long">
+        delete from post_tag where post_id = #{postId}
+    </update>
+
+    <select id="findNameByPostId" parameterType="Long" resultType="String">
+        select h.name
+        from post_tag pt inner join hashtag h on pt.tag_id = h.id
+        where post_id = #{postId}
+    </select>
+    <select id="countByTagName" parameterType="String" resultType="Integer">
+        select count(*) from post_tag pt inner join hashtag h on pt.tag_id = h.id
+        where h.name = #{tagName}
+    </select>
+
+    <delete id="deleteByPostIdAndTagName" parameterType="Map">
+        delete from post_tag where post_id = #{postId} and tag_id in (
+            select id from hashtag where name like #{tagName});
+    </delete>
+</mapper>

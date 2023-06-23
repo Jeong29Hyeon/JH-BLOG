@@ -12,14 +12,16 @@ import java.util.List;
 @RequiredArgsConstructor
 public class PostService {
     private final PostMapper postMapper;
-
+    private final HashtagService hashtagService;
     /**
      * 포스트 저장
      * @param postRequest - 포스트 정보
      * @return - keyGenerated 에 의해 생성된 기본키
      */
-    public Long savePost(final PostRequest postRequest) {
+    @Transactional
+    public Long savePost(final PostRequest postRequest, final List<String> tagNames) {
         postMapper.save(postRequest);
+        hashtagService.saveHashtag(tagNames,postRequest.getId());
         return postRequest.getId();
     }
 
@@ -38,8 +40,9 @@ public class PostService {
      * @return PK
      */
     @Transactional
-    public Long updatePost(final PostRequest postRequest) {
+    public Long updatePost(final PostRequest postRequest, final List<String>tagNames) {
         postMapper.update(postRequest);
+        hashtagService.updateHashtag(tagNames, postRequest.getId());
         return postRequest.getId();
     }
 
@@ -48,8 +51,10 @@ public class PostService {
      * @param id - PK
      * @return PK
      */
+    @Transactional
     public Long deletePost(final Long id) {
         postMapper.deleteById(id);
+        hashtagService.deleteByPostId(id);
         return id;
     }
 

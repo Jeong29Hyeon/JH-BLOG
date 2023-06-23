@@ -1,6 +1,7 @@
 package com.study.blog.mapper;
 import com.study.blog.domain.post.PostRequest;
 import com.study.blog.domain.post.PostResponse;
+import com.study.blog.dto.SearchDto;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
@@ -38,4 +39,10 @@ public interface PostMapper {
      */
     List<PostResponse> findAll();
 
+    /**
+     * 해시태그에 관련된 게시글 리스트 조회
+     * @param searchDto - 해시태그 (나중에 추가될 검색파라미터들)
+     * @return - 게시글 리스트
+     */
+    List<PostResponse> findAllByHashtag(SearchDto searchDto);
 }

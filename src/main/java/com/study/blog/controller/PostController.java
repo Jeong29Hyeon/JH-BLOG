@@ -40,7 +40,7 @@ public class PostController {
 
     @PostMapping(value = "/save", produces = "application/json;charset=UTF-8")
     @ResponseBody
-    public ResponseEntity<Map<String, String>> savePost(@RequestParam(value = "image")MultipartFile file,
+    public ResponseEntity<Map<String, String>> savePost(@RequestParam(value = "image", required = false)MultipartFile file,
                                                         final PostRequest postRequest){
         Map<String,String> response = new HashMap<>();
         String saveFileName = null;
@@ -50,8 +50,8 @@ public class PostController {
             response.put("errorMsg",e.getMessage());
             return ResponseEntity.badRequest().body(response);
         }
-        // 이미지 파일이 없으면 dafault.jpg 로 썸네일 잡음
-        postRequest.setThumbnail(Objects.requireNonNullElse(saveFileName, "default.jpg"));
+        // 이미지 파일이 없으면 default.gif 로 썸네일 잡음
+        postRequest.setThumbnail(Objects.requireNonNullElse(saveFileName, "default.gif"));
         Long id = postService.savePost(postRequest);
         response.put("msg","포스트가 저장되었습니다.");
         response.put("id", String.valueOf(id));
@@ -71,19 +71,27 @@ public class PostController {
         return "redirect:/post";
     }
 
-    @PostMapping("/post/update")
-    public ResponseEntity<Map<String,String>> updatePost(@RequestParam(value = "image")MultipartFile file,
+    @PostMapping("/update")
+    @ResponseBody
+    public ResponseEntity<Map<String,String>> updatePost(@RequestParam(value = "image", required = false)MultipartFile file,
                                         final PostRequest postRequest) {
         Map<String,String> response = new HashMap<>();
         String saveFileName = null;
         try {
-            saveFileName = imageService.uploadImage(file);
+            // 글 수정에서 file이 null이면 썸네일을 수정하지 않았다는 의미다.
+            saveFileName = imageService.uploadImage(file); //이미지를 서버 upload 폴더에 저장한다.
         } catch (Exception e) {
             response.put("errorMsg",e.getMessage());
             return ResponseEntity.badRequest().body(response);
         }
-        // 이미지 파일이 없으면 dafault.jpg 로 썸네일 잡음
-        postRequest.setThumbnail(Objects.requireNonNullElse(saveFileName, "default.jpg"));
+
+        String originThumbnail = postService.findPostById(postRequest.getId()).getThumbnail();
+        if(saveFileName != null) { //새로운 이미지가 들어오면 기존 이미지는 폴더에서 삭제하고 새로 추가
+            imageService.deleteImage(originThumbnail);
+            postRequest.setThumbnail(saveFileName);
+        } else { // 이미지 파일이 없으면 썸네일 그대로 냅둬야함
+            postRequest.setThumbnail(originThumbnail);
+        }
         postService.updatePost(postRequest);
         response.put("msg","포스트가 수정되었습니다.");
         response.put("id", String.valueOf(postRequest.getId()));

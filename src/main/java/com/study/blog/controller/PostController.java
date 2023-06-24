@@ -2,6 +2,7 @@ package com.study.blog.controller;
 
 import com.study.blog.domain.post.PostRequest;
 import com.study.blog.domain.post.PostResponse;
+import com.study.blog.dto.SearchDto;
 import com.study.blog.mapper.PostTagMapper;
 import com.study.blog.service.HashtagService;
 import com.study.blog.service.ImageService;
@@ -28,8 +29,10 @@ public class PostController {
     private final HashtagService hashtagService;
 
     @GetMapping()
-    public String openBlog(Model model) {
-        model.addAttribute("posts",postService.findAllPost());
+    public String openBlog(@ModelAttribute("searchDto") final SearchDto searchDto,
+                            Model model) {
+        System.out.println("searchDto.toString() = " + searchDto.toString());
+        model.addAttribute("posts",postService.findAllPost(searchDto));
         model.addAttribute("hashtags",hashtagService.findAll());
         return "post/main";
     }
@@ -69,7 +72,8 @@ public class PostController {
     }
 
     @GetMapping("/view")
-    public String viewPost(@RequestParam("id") final Long id, Model model) {
+    public String viewPost(@RequestParam("id") final Long id,
+                           Model model) {
         PostResponse findPost = postService.findPostById(id);
         model.addAttribute("post",findPost);
         model.addAttribute("hashtags",postTagMapper.findNameByPostId(id));

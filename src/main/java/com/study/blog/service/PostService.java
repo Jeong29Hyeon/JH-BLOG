@@ -2,10 +2,15 @@ package com.study.blog.service;
 
 import com.study.blog.domain.post.PostRequest;
 import com.study.blog.domain.post.PostResponse;
+import com.study.blog.dto.Pagination;
+import com.study.blog.dto.SearchDto;
 import com.study.blog.mapper.PostMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -62,7 +67,13 @@ public class PostService {
      * 게시글 리스트 조회
      * @return 게시글 리스트
      */
-    public List<PostResponse> findAllPost() {
-        return postMapper.findAll();
+    public List<PostResponse> findAllPost(final SearchDto searchDto) {
+        int count = postMapper.count(searchDto);
+        if(count < 1) {
+            return Collections.emptyList();
+        }
+        System.out.println(count);
+        Pagination pagination = new Pagination(count,searchDto);
+        return postMapper.findAll(searchDto);
     }
 }

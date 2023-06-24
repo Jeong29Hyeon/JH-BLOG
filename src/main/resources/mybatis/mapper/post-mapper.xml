@@ -15,6 +15,85 @@
         , modified_date
     </sql>
 
+    <!-- 페이징 동적쿼리 -->
+    <!-- hashtag 없이 키워드,서치타입 검색 -->
+    <!-- hashtag, 키워드, 서치타입 검색 -->
+    <sql id="search">
+        <if test="hashtag != null and hashtag != ''">
+            <choose>
+                <when test="keyword != null and keyword != ''">
+                    <choose>
+                        <!-- searchType이 있을 때 -->
+                        <when test="searchType != null and searchType != ''">
+                            <choose>
+                                <when test="searchType.equals('title')">
+                                    left join post_tag pt on p.id = pt.post_id
+                                    left join hashtag h on pt.tag_id = h.id
+                                    where delete_yn = 0
+                                    AND (
+                                    p.title LIKE CONCAT('%',#{keyword},'%')
+                                    OR h.name = #{hashtag}
+                                    )
+                                </when>
+                                <when test="searchType.equals('content')">
+                                    left join post_tag pt on p.id = pt.post_id
+                                    left join hashtag h on pt.tag_id = h.id
+                                    where delete_yn = 0
+                                    AND (
+                                    p.content LIKE CONCAT('%',#{keyword},'%')
+                                    OR h.name = #{hashtag}
+                                    )
+                                </when>
+                            </choose>
+                        </when>
+                        <otherwise>
+                            left join post_tag pt on p.id = pt.post_id
+                            left join hashtag h on pt.tag_id = h.id
+                            where delete_yn = 0
+                            AND (
+                            p.title LIKE CONCAT('%',#{keyword},'%')
+                            OR p.content LIKE CONCAT('%',#{keyword},'%')
+                            OR h.name = #{hashtag}
+                            )
+                        </otherwise>
+                    </choose>
+                </when>
+                <otherwise>
+                    left join post_tag pt on p.id = pt.post_id
+                    left join hashtag h on pt.tag_id = h.id
+                    where delete_yn = 0
+                    AND h.name = #{hashtag}
+                </otherwise>
+            </choose>
+        </if>
+        <if test="hashtag == null or hashtag == ''">
+            <if test="keyword != null and keyword != ''">
+                <choose>
+                    <!-- searchType이 있을 때 -->
+                    <when test="searchType != null and searchType != ''">
+                        <choose>
+                            <when test="searchType.equals('title')">
+                                where delete_yn = 0
+                                AND p.title LIKE CONCAT('%',#{keyword},'%')
+                            </when>
+                            <when test="searchType.equals('content')">
+                                where delete_yn = 0
+                                AND p.content LIKE CONCAT('%',#{keyword},'%')
+                            </when>
+                        </choose>
+                    </when>
+                    <otherwise>
+                        where delete_yn = 0
+                        AND (
+                        p.title LIKE CONCAT('%',#{keyword},'%')
+                        OR p.content LIKE CONCAT('%',#{keyword},'%')
+                        )
+                    </otherwise>
+                </choose>
+            </if>
+        </if>
+    </sql>
+
     <!-- 포스트 저장 -->
     <insert id="save" parameterType="PostRequest" useGeneratedKeys="true" keyProperty="id">
         INSERT INTO post (title,description,thumbnail,content,view_cnt, delete_yn, created_date,modified_date)
@@ -54,30 +133,29 @@
     </delete>
 
     <!-- 게시글 리스트 조회 -->
-    <select id="findAll" resultType="PostResponse">
-        SELECT
-        <include refid="postColumns" />
+    <select id="findAll" parameterType="SearchDto" resultType="PostResponse">
+        SELECT distinct
+            p.id as id,
+            p.title as title,
+            p.description as description,
+            p.thumbnail as thumbnail,
+            p.content as content,
+            p.view_cnt as viewCnt,
+            p.delete_yn as deleteYn,
+            p.created_date as createdDate,
+            p.modified_date as modifiedDate
         FROM
-        post
-        WHERE
-        delete_yn = 0
+        post p
+        <include refid="search"/>
         ORDER BY
-        id DESC
+            p.id DESC
+        LIMIT #{pagination.limitStart}, #{recordSize}
     </select>
 
-    <!-- 해시태그 id로 게시글 리스트 조회 -->
-    <select id="findAllByHashtag" parameterType="SearchDto" resultType="PostResponse">
-        select
-            p.id,
-            p.title,
-            p.description,
-            p.thumbnail,
-            p.content,
-            p.view_cnt,
-            p.delete_yn,
-            p.created_date,
-            p.modified_date
-        from post p inner join post_tag pt on p.id = pt.post_id
-        where p.delete_yn = 0 and pt.tag_id = #{tagId};
+    <select id="count" parameterType="SearchDto" resultType="int">
+        select distinct
+            count(*)
+        from post p
+        <include refid="search"/>
     </select>
 </mapper>

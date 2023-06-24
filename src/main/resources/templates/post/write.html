@@ -27,10 +27,13 @@
                    <input id="description" name="description" type="text" class="form-control" placeholder="이 포스트를 간단하게 표현해봐요!"
                    maxlength="50">
                </div>
-               <div>
+               <div th:if="${hashtags == null}">
                    <label for="hashtag">해시태그 입력</label>
-                   <input id="hashtag" name="hashtag" th:if="${hashtags.isEmpty()}">
-                   <input id="hashtag" name="hashtag" th:unless="${hashtags.isEmpty()}" th:value="${#strings.listJoin(hashtags,',')}">
+                   <input id="hashtag" name="hashtag" >
+               </div>
+               <div th:unless="${hashtags == null}">
+                   <label for="hashtag">해시태그 입력</label>
+                   <input id="hashtag" name="hashtag"  th:value="${#strings.listJoin(hashtags,',')}">
                </div>
                <div th:if="${post == null}">
                    <label for="image" class="me-3">썸네일 추가 : </label>
@@ -183,7 +186,9 @@
 
         //게시글 리스트로 이동
         function goListPage() {
-            location.href = '/post';
+            const queryString = new URLSearchParams(location.search);
+            queryString.delete('id')
+            location.href = '/post' + '?' + queryString.toString();
         }
 
         //글 수정 페이지에서 썸네일변경 버튼을 누르면 file Input을 생성한다.

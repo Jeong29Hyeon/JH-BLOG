@@ -97,7 +97,6 @@
         function goListPage() {
             const queryString = new URLSearchParams(location.search);
             queryString.delete('id');
-            queryString.delete('commentPage');
             location.href = '/post' + '?' + queryString.toString();
         }
         /*]]>*/

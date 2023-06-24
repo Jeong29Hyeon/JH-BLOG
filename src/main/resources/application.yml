@@ -17,3 +17,5 @@ mybatis:
 logging:
   level:
     web: debug
+
+

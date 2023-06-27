@@ -120,7 +120,7 @@
                         태그 목록
                         <hr>
                         <div class="tagList">
-                            <div class="d-flex flex-column align-items-start" th:unless="${hashtags.isEmpty()}">
+                            <div class="d-flex flex-column align-items-start gap-1" th:unless="${hashtags.isEmpty()}">
                                 <a href="/post" th:style="${searchDto.hashtag == null} ? 'color:#20C997;':''">전체보기</a>
                                 <a href="javascript: void(0)" th:each="hashtag:${hashtags}"
                                    th:style="${searchDto.hashtag != null} ? (${searchDto.hashtag == hashtag.name} ? 'color:#20C997;' : '') : ''"

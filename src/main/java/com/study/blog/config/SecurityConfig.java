@@ -18,8 +18,8 @@ public class SecurityConfig {
                 .csrf().disable()
                 .formLogin().disable()
                 .authorizeRequests()//URL별 권한 관리를 설정하는 옵션의 시작점
-                .antMatchers("/","/css/**","/images/**",
-                        "/js/**").permitAll()
+                .antMatchers("/","/css/**","/image/**",
+                        "/js/**","/image/post/**").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .logout()

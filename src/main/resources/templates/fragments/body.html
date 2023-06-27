@@ -30,7 +30,7 @@
 
                 <ul class="navbar-nav d-flex flex-row">
                     <li class="nav-item me-3 me-lg-0">
-                        <a th:if="${session.user == null}" th:href="@{/oauth2-login}" class="btn btn-primary">소셜 로그인</a>
+                        <a th:if="${session.user == null}" th:href="@{/oauth2-login}" class="btn btn-primary mx-1">소셜 로그인</a>
                         <div th:if="${session.user != null}" class="d-flex flex-row align-items-center gap-2 mx-1" th:object="${session.user}">
                             <img th:src="*{image}" alt="프로필" class="img-fluid rounded-9" style="max-height: 30px;">
                             <span th:text="*{nickname}" style="font-size: 12px;"></span>

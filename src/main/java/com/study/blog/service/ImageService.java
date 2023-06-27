@@ -12,6 +12,7 @@ import java.util.Map;
 @Service
 public class ImageService {
     private final String path = "c://upload/blog/image";
+    private final String postPath = "c://upload/blog/post";
 
     public String uploadImage(MultipartFile file) {
         if(file == null || file.isEmpty()) {
@@ -19,7 +20,7 @@ public class ImageService {
         }
         String originalFilename = file.getOriginalFilename();
         String contentType = file.getContentType();
-        String extension = checkExtention(contentType);
+        String extension = checkExtension(contentType);
         String saveFileName = System.nanoTime() + extension;
         File saveFile = new File(path,saveFileName);
         if(!saveFile.exists()) {
@@ -34,7 +35,27 @@ public class ImageService {
         return saveFileName;
     }
 
-    private String checkExtention(String contentType) {
+    public String uploadPostImage(MultipartFile file) {
+        if(file == null || file.isEmpty()) {
+            return null;
+        }
+        String contentType = file.getContentType();
+        String extension = checkExtension(contentType);
+        String saveFileName = System.nanoTime() + extension;
+        File saveFile = new File(postPath,saveFileName);
+        if(!saveFile.exists()) {
+            saveFile.mkdirs();
+        }
+        try {
+            file.transferTo(saveFile);
+        } catch (IOException e) {
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        }
+        return saveFileName;
+    }
+
+    private String checkExtension(String contentType) {
         Map<String, String> response = new HashMap<>();
         String extension;
         if(!StringUtils.hasText(contentType)) {

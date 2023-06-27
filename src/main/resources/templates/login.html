@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/BlogLayout}">
+<th:block layout:fragment="title">
+    <title>소셜 로그인</title>
+</th:block>
+<th:block layout:fragment="add-css">
+    <style>
+        #loginDiv img{
+            width: 300px;
+            height: 45px;
+        }
+    </style>
+</th:block>
+<th:block layout:fragment="content">
+   <div id="loginDiv" th:if="${session.user == null}" class="d-flex flex-column align-items-center justify-content-center mt-5 gap-3">
+       <span>소셜 로그인</span>
+       <a href="/oauth2/authorization/kakao"><img th:src="@{/image/kakao_btn.png}"></a>
+       <a href="/oauth2/authorization/google"><img th:src="@{/image/google_btn.png}"></a>
+       <a href="/oauth2/authorization/naver"><img th:src="@{/image/naver_btn.png}"></a>
+   </div>
+</th:block>
+</html>

@@ -29,6 +29,6 @@ public class MyErrorController implements ErrorController {
                 return "error/500";
             }
         }
-        return "error";
+        return "error/404";
     }
 }

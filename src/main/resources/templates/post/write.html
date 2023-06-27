@@ -94,13 +94,13 @@
                         // blob : Java Script 파일 객체
                         console.log(blob);
                         const formData = new FormData();
-                        formData.append('image', blob);
+                        formData.append('postImage', blob);
 
-                        let url = '/files/';
+                        let url = '/image/post/';
                         $.ajax({
                             type: 'POST',
                             enctype: 'multipart/form-data',
-                            url: '/images/upload',
+                            url: '/post-image/upload',
                             data: formData,
                             dataType: 'json',
                             processData: false,

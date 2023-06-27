@@ -18,6 +18,14 @@
                 margin-top: 45px;
             }
         }
+        .tagList a{
+            color: black;
+            text-decoration: none;
+
+        }
+        .tagList a:hover {
+            text-decoration-line: underline;
+        }
     </style>
 </th:block>
 <body>
@@ -111,10 +119,11 @@
                     <div>
                         태그 목록
                         <hr>
-                        <div class="">
+                        <div class="tagList">
                             <div class="d-flex flex-column align-items-start" th:unless="${hashtags.isEmpty()}">
-                                <a href="/post" >전체보기</a>
+                                <a href="/post" th:style="${searchDto.hashtag == null} ? 'color:#20C997;':''">전체보기</a>
                                 <a href="javascript: void(0)" th:each="hashtag:${hashtags}"
+                                   th:style="${searchDto.hashtag != null} ? (${searchDto.hashtag == hashtag.name} ? 'color:#20C997;' : '') : ''"
                                    th:onclick="searchViaTag([[${hashtag.name}]])" th:text="'#'+${hashtag.name}"></a>
                             </div>
                         </div>

@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/BlogLayout}">
+<th:block layout:fragment="content">
+    <div class="text-center">
+        <h1> 잘못된 요청입니다. </h1>
+        <h2> 메인화면으로 이동하세요 ! </h2>
+        <a href="/post" class="btn btn-outline-secondary">홈으로</a>
+    </div>
+</th:block>
+</html>

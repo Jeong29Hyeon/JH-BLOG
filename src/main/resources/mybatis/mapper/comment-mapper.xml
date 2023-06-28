@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.study.blog.mapper.CommentMapper">
+    <insert id="save" parameterType="CommentRequest" useGeneratedKeys="true" keyProperty="id">
+        insert into comment(post_id, content, user_id, created_date, modified_date, parent_id, depth)
+        VALUES (#{postId},#{content},#{userId},NOW(),null,#{parentId},#{depth})
+    </insert>
+
+    <select id="findComments" resultType="CommentResponse">
+        select * from comment where depth = 1 order by id
+    </select>
+    <select id="findReplies" parameterType="Long" resultType="CommentResponse">
+        select * from comment where parent_id = #{id} and depth = 2 order by created_date
+    </select>
+</mapper>

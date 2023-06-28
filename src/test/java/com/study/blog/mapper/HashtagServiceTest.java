@@ -44,9 +44,9 @@ class HashtagServiceTest {
          String hashtagName = "mybatis";
          Hashtag springTag = hashtagMapper.findByName(hashtagName);
          SearchDto searchDto = new SearchDto();
-         searchDto.setTagId(springTag.getId());
+         searchDto.setHashtag(springTag.getName());
          //when
-         List<PostResponse> springList = postMapper.findAllByHashtag(searchDto);
+         List<PostResponse> springList = postMapper.findAll(searchDto);
          //then
          for (PostResponse postResponse : springList) {
              System.out.println("postResponse.getContent() = " + postResponse.getContent());

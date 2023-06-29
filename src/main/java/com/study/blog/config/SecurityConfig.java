@@ -20,6 +20,7 @@ public class SecurityConfig {
                 .formLogin().disable()
                 .authorizeHttpRequests((auth)-> {
                     auth.antMatchers("/","/css/**","/error","/js/**","/post","/image/**/*","/oauth2-login").permitAll()
+                            .antMatchers("/post/write","/post/save","/post/delete","/post/update").hasRole(Role.USER.name())
                             .anyRequest().authenticated();
                 })
 //                .authorizeRequests()//URL별 권한 관리를 설정하는 옵션의 시작점

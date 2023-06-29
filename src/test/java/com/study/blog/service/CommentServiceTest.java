@@ -19,11 +19,11 @@ class CommentServiceTest {
     @DisplayName("댓글을 저장한다.")
     public void saveComment() throws Exception {
         //given
-        CommentRequest commentRequest = CommentRequest.builder().postId(13L).content("댓글1")
+        CommentRequest commentRequest = CommentRequest.builder().postId(13L).content("댓글3")
                                         .userId(3L).parentId(0L).depth(1).build();
         //when
         Long savedId = commentService.save(commentRequest);
-        List<CommentResponse> comments = commentService.findComments();
+        List<CommentResponse> comments = commentService.findComments(13L);
 
         //then
         comments.stream().filter((comment)-> comment.getId().equals(savedId)).findFirst()
@@ -34,8 +34,8 @@ class CommentServiceTest {
     @DisplayName("대댓글을 저장한다.")
     public void saveReply() throws Exception {
         //given
-        CommentRequest commentRequest = CommentRequest.builder().postId(13L).content("댓글1의 대댓글")
-                .userId(3L).parentId(2L).depth(2).build();
+        CommentRequest commentRequest = CommentRequest.builder().postId(13L).content("댓글3의 1")
+                .userId(3L).parentId(6L).depth(2).build();
         //when
         Long savedId = commentService.save(commentRequest);
         List<CommentResponse> comments = commentService.findReplies(2L);
@@ -44,4 +44,13 @@ class CommentServiceTest {
             System.out.println(comment.getContent());
         }
      }
+
+     @Test
+     @DisplayName("모든 댓글을 조회하면 댓글의 정보와 회원의 정보도 나와야한다.")
+     public void findComments() throws Exception {
+         List<CommentResponse> comments = commentService.findComments(13L);
+         for (CommentResponse comment : comments) {
+             System.out.println("comment.toString() = " + comment.toString());
+         }
+      }
 }

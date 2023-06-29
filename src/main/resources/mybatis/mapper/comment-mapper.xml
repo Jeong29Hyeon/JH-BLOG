@@ -6,10 +6,97 @@
         VALUES (#{postId},#{content},#{userId},NOW(),null,#{parentId},#{depth})
     </insert>
 
-    <select id="findComments" resultType="CommentResponse">
-        select * from comment where depth = 1 order by id
+    <select id="findComments" parameterType="Long" resultMap="CommentWithUser">
+        WITH RECURSIVE CTE AS (
+            SELECT id, post_id, content, user_id, created_date, modified_date, parent_id,depth, convert(id, char) as path
+            FROM comment
+            WHERE comment.parent_id = 0
+              AND post_id = #{postId}
+            UNION ALL
+            SELECT uc.id, uc.post_id, uc.content, uc.user_id, uc.created_date, uc.modified_date, uc.parent_id, uc.depth, concat(CTE.id, '-', uc.id) AS path
+            FROM comment uc
+                     INNER JOIN CTE ON uc.parent_id = CTE.id
+            WHERE uc.post_id = #{postId}
+        )
+        SELECT
+            c.id as id,
+            c.post_id as post_id,
+            c.content as content,
+            c.created_date as created_date,
+            c.modified_date as modified_date,
+            c.parent_id as parent_id,
+            c.depth as depth,
+            u.id as u_id,
+            u.email as u_email,
+            u.role as u_role,
+            u.social_type as u_social_type,
+            u.social_id as u_social_id,
+            u.nickname as u_nickname,
+            u.image_url as u_image_url
+        FROM CTE as c inner join users u on c.user_id = u.id
+        ORDER BY CONVERT(SUBSTRING_INDEX(path, '-', 1), UNSIGNED) ASC, id ASC, CONVERT(SUBSTRING_INDEX(path, '-', 2), UNSIGNED) ASC, id ASC;
     </select>
     <select id="findReplies" parameterType="Long" resultType="CommentResponse">
-        select * from comment where parent_id = #{id} and depth = 2 order by created_date
+        select
+            c.id as id,
+            c.post_id as post_id,
+            c.content as content,
+            c.created_date as created_date,
+            c.modified_date as modified_date,
+            c.parent_id as parent_id,
+            c.depth as depth,
+            u.id as u_id,
+            u.email as u_email,
+            u.role as u_role,
+            u.social_type as u_social_type,
+            u.social_id as u_social_id,
+            u.nickname as u_nickname,
+            u.image_url as u_image_url
+        from comment as c inner join users u
+            on c.user_id = u.id
+        where parent_id = #{id} and depth = 2 order by created_date
     </select>
+
+    <select id="findOne" parameterType="Long" resultMap="CommentWithUser">
+        select
+            c.id as id,
+            c.post_id as post_id,
+            c.content as content,
+            c.created_date as created_date,
+            c.modified_date as modified_date,
+            c.parent_id as parent_id,
+            c.depth as depth,
+            u.id as u_id,
+            u.email as u_email,
+            u.role as u_role,
+            u.social_type as u_social_type,
+            u.social_id as u_social_id,
+            u.nickname as u_nickname,
+            u.image_url as u_image_url
+        from comment as c inner join users u
+                                     on c.user_id = u.id
+        where c.id = #{commentId}
+    </select>
+
+
+    <resultMap id="CommentWithUser" type="CommentResponse">
+        <id property="id" column="id"/>
+        <result property="postId" column="post_id"/>
+        <result property="content" column="content"/>
+        <result property="createdDate" column="created_date"/>
+        <result property="modifiedDate" column="modified_date"/>
+        <result property="parentId" column="parent_id"/>
+        <result property="depth" column="depth"/>
+        <association property="user" resultMap="UserBase" columnPrefix="u_"/>
+    </resultMap>
+
+    <resultMap id="UserBase" type="Users">
+        <id property="id" column="id"/>
+        <result property="email" column="email"/>
+        <result property="role" column="role"/>
+        <result property="socialType" column="social_type"/>
+        <result property="socialId" column="social_id"/>
+        <result property="nickname" column="nickname"/>
+        <result property="imageUrl" column="image_url"/>
+    </resultMap>
 </mapper>

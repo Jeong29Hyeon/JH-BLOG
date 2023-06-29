@@ -1,14 +1,12 @@
 package com.study.blog.domain;
 import com.study.blog.oauth2.Role;
 import com.study.blog.oauth2.SocialType;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 @Getter
 @Setter
 @NoArgsConstructor
+@ToString
 public class Users {
     private Long id;
     private String email;

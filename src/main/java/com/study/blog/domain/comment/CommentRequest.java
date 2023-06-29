@@ -1,11 +1,11 @@
 package com.study.blog.domain.comment;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 @Getter
 @Setter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@ToString
 public class CommentRequest {
     private Long id;
     private Long postId;

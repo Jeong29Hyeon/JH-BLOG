@@ -12,7 +12,7 @@ import java.util.List;
 public interface CommentMapper {
     void save(CommentRequest commentRequest);
 
-    List<CommentResponse> findComments();
+    List<CommentResponse> findComments(Long postId);
 
     List<CommentResponse> findReplies(Long id);
 
@@ -22,6 +22,8 @@ public interface CommentMapper {
     @Delete("delete from comment where id=#{id}")
     void delete(Long id);
 
-    @Update("update comment set content = #{content} where id = #{id}")
+    @Update("update comment set content = #{content}, modified_date = now() where id = #{id}")
     void update(CommentRequest commentRequest);
+
+    CommentResponse findOne(Long commentId);
 }

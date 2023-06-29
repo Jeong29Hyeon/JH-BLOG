@@ -17,8 +17,8 @@ public class CommentService {
         return commentRequest.getId();
     }
 
-    public List<CommentResponse> findComments() {
-        return commentMapper.findComments();
+    public List<CommentResponse> findComments(Long postId) {
+        return commentMapper.findComments(postId);
     }
 
     public List<CommentResponse> findReplies(final Long id) {
@@ -35,5 +35,9 @@ public class CommentService {
 
     public void update(final CommentRequest commentRequest) {
         commentMapper.update(commentRequest);
+    }
+
+    public CommentResponse findOne(Long commentId) {
+        return commentMapper.findOne(commentId);
     }
 }

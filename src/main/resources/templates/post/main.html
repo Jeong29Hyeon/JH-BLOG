@@ -50,11 +50,11 @@
                         <div class="col-8 d-flex">
                             <div class="input-group">
                                 <div class="form-outline">
-                                    <input type="search" id="keyword" name="keyword" class="form-control"/>
+                                    <input type="text" id="keyword" name="keyword" class="form-control"/>
                                     <label class="form-label" for="keyword"
-                                           th:text="${searchDto.keyword == ''} ? '키워드를 입력하세요' : ${searchDto.keyword}">키워드를 입력하세요</label>
+                                           th:text="${searchDto.keyword == '' || searchDto.keyword == null} ? '키워드를 입력하세요' : ${searchDto.keyword}">키워드를 입력하세요</label>
                                 </div>
-                                <button type="button" class="btn btn-primary" onclick="searchViaKeyword()">
+                                <button type="button" id="searchBtn" class="btn btn-primary" onclick="searchViaKeyword()">
                                     <i class="fas fa-search"></i>
                                 </button>
                                 <button type="button" class="btn btn-secondary" onclick="location.href='/post'">

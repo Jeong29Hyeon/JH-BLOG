@@ -16,8 +16,11 @@ public interface UserMapper {
     @Select("select * from users where social_type = #{socialType} and social_id = #{socialId}")
     Users findBySocialTypeAndSocialId(Map<String,Object> map);
 
-    @Update("update users set name = #{name} where id=#{id}")
-    void update(Users user);
+    @Update("update users set nickname = #{nickname} where id=#{id}")
+    int update(Users user);
 
     int save(Users newUser);
+
+    @Select("select * from users where id=#{userId}")
+    Users findById(Long userId);
 }

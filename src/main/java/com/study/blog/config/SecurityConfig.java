@@ -1,5 +1,6 @@
 package com.study.blog.config;
 
+import com.study.blog.oauth2.AjaxAuthenticationEntryPoint;
 import com.study.blog.oauth2.CustomOAuth2UserService;
 import com.study.blog.oauth2.Role;
 import lombok.RequiredArgsConstructor;
@@ -29,6 +30,9 @@ public class SecurityConfig {
 //                .anyRequest().authenticated()
                 .logout()
                 .logoutSuccessUrl("/post")
+                .and()
+                .exceptionHandling()
+                .authenticationEntryPoint(new AjaxAuthenticationEntryPoint("/oauth2-login"))
                 .and()
                 .oauth2Login()
                 .loginPage("/oauth2-login")

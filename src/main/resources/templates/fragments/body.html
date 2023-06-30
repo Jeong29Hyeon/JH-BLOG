@@ -17,17 +17,6 @@
             </button>
             <div class="collapse navbar-collapse" id="navbarExample01">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                </ul>
-
-                <ul class="navbar-nav d-flex flex-row">
-                    <li class="nav-item me-3 me-lg-0">
-                        <a th:if="${session.user == null}" th:href="@{/oauth2-login}" class="btn btn-primary mx-1">소셜 로그인</a>
-                        <div th:if="${session.user != null}" class="d-flex flex-row align-items-center gap-2 mx-1" th:object="${session.user}">
-                            <img th:src="*{image}" alt="프로필" class="img-fluid rounded-9" style="max-height: 30px;">
-                            <span th:text="*{nickname}" style="font-size: 12px;"></span>
-                            <a th:href="@{/logout}" class="btn btn-outline-secondary">로그아웃</a>
-                        </div>
-                    </li>
                     <!-- Icons -->
                     <li class="nav-item me-3 me-lg-0">
                         <a class="nav-link" href="https://velog.io/@jeong29hyeon" rel="nofollow" target="_blank">
@@ -41,11 +30,51 @@
                         </a>
                     </li>
                 </ul>
+
+                <ul class="navbar-nav d-flex flex-row">
+                    <li class="nav-item me-3 me-lg-0">
+                        <a th:if="${session.user == null}" th:href="@{/oauth2-login}" class="btn btn-primary mx-1">소셜
+                            로그인</a>
+                        <div th:if="${session.user != null}" class="d-flex flex-row align-items-center gap-2 mx-1"
+                             th:object="${session.user}">
+                            <img th:src="*{image}" alt="프로필" class="img-fluid rounded-9" style="max-height: 30px;">
+                            <!-- 드롭다운 메뉴 -->
+                            <div class="btn-group shadow-0">
+                            <button type="button" th:text="*{nickname}" class="btn btn-light dropdown-toggle"
+                                    data-mdb-toggle="dropdown" aria-expanded="false" style="font-size: 15px;">dropdown</button>
+                            <ul class="dropdown-menu text-center">
+                                <li><a class="dropdown-item" href="javascript: void(0);" th:onclick="openNameChangeModal([[${session.user.id}]])">닉네임 변경</a></li>
+                                <li><a class="dropdown-item" th:href="@{/logout}">로그아웃</a></li>
+                            </ul>
+                            </div>
+                            <!-- 드롭다운 끝 -->
+                        </div>
+                    </li>
+                </ul>
             </div>
         </div>
     </nav>
     <div class="p-2">
-
+        <!-- 닉네임 변경 모달 -->
+        <div class="modal fade" id="nameChangeModal" tabindex="-1" aria-labelledby="nameChangeModal" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">닉네임 변경</h5>
+                        <button type="button" class="btn-close" data-mdb-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <p>변경할 닉네임을 적어주세요</p>
+                        <div class="d-flex gap-2">
+                            <input type="text" maxlength="12" id="nameInput" name="nickname">
+                            <button id="changeNickname" type="button" class="btn btn-outline-info">저장</button>
+                        </div>
+                        <p class="text-muted" style="font-size: 13px;">3~12자의 영문 소문자와 숫자 한글만 입력 가능합니다.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- 모달 끝 -->
     </div>
 </header>
 <!-- Navbar -->
@@ -72,6 +101,47 @@
 <!--해시태그 라이브러리-->
 <script src="https://cdn.jsdelivr.net/npm/@yaireo/tagify"></script>
 <script src="https://cdn.jsdelivr.net/npm/@yaireo/tagify/dist/tagify.polyfills.min.js"></script>
+<script th:inline="javascript">
+    function openNameChangeModal(id) {
+        document.getElementById('changeNickname').setAttribute('onclick',`changeNickname(${id})`)
+        $('#nameChangeModal').modal('show')
+    }
+
+    function changeNickname(id) {
+        let nameInput = document.getElementById('nameInput');
+        let nameRegex = /[a-z가-힣0-9]{3,12}/;
+        const nickname = document.getElementById('nameInput');
+        if(!nameRegex.test(nameInput.value)) {
+            alert('올바른 닉네임을 적어주세요!')
+            return false;
+        }
+        const uri = `/users/${id}`
+        //ajax 통신 보내고, 모든 서버로의 ajax 통신에 예외 로직 추가하기
+        $.ajax({
+            url: uri,
+            type: 'patch',
+            data: {
+                nickname : nickname.value
+            },
+            dataType: 'json',
+            async : false,
+            success: function (response) {
+                if(response.errorMsg) {
+                    alert(response.errorMsg);
+                    return false;
+                }
+                alert(response.msg)
+                location.reload()
+            },
+            error: function (jqXHR) {
+                if(jqXHR.status === 403) {
+                    alert('세션이 만료되어 로그인화면으로 이동합니다.')
+                    location.href='/oauth2-login';
+                }
+            }
+        })
+    }
+</script>
 <th:block layout:fragment="add-javascript"></th:block>
 </body>
 </html>

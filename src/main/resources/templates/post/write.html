@@ -115,6 +115,11 @@
                                 callback(url, data.originalFileName);
                             },
                             error: function (jqXHR) {
+                                if(jqXHR.status === 403) {
+                                    alert('세션이 만료되어 로그인화면으로 이동합니다.')
+                                    location.href='/oauth2-login';
+                                    return;
+                                }
                                 alert(jqXHR.responseJSON.msg)
                             }
                         });
@@ -177,7 +182,13 @@
                     alert(response.msg);
                     location.href = `/post/view?id=${response.id}`
                 },
+
                 error : function (jqXHR) {
+                    if(jqXHR.status === 403) {
+                        alert('세션이 만료되어 로그인화면으로 이동합니다.')
+                        location.href='/oauth2-login';
+                        return;
+                    }
                     alert(jqXHR.responseJSON.errorMsg);
                     console.log(jqXHR.responseJSON)
                 }

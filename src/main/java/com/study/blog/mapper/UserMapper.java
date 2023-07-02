@@ -1,7 +1,6 @@
 package com.study.blog.mapper;
 
 import com.study.blog.domain.Users;
-import com.study.blog.oauth2.SocialType;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;

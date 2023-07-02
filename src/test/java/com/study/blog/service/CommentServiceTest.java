@@ -9,8 +9,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 @SpringBootTest
 class CommentServiceTest {
     @Autowired private CommentService commentService;
@@ -22,7 +20,7 @@ class CommentServiceTest {
         CommentRequest commentRequest = CommentRequest.builder().postId(13L).content("댓글3")
                                         .userId(3L).parentId(0L).depth(1).build();
         //when
-        Long savedId = commentService.save(commentRequest);
+        Long savedId = commentService.saveReply(commentRequest);
         List<CommentResponse> comments = commentService.findComments(13L);
 
         //then
@@ -37,7 +35,7 @@ class CommentServiceTest {
         CommentRequest commentRequest = CommentRequest.builder().postId(13L).content("댓글3의 1")
                 .userId(3L).parentId(6L).depth(2).build();
         //when
-        Long savedId = commentService.save(commentRequest);
+        Long savedId = commentService.saveReply(commentRequest);
         List<CommentResponse> comments = commentService.findReplies(2L);
         //then
         for (CommentResponse comment : comments) {

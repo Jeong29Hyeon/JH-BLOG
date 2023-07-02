@@ -4,13 +4,9 @@ import com.study.blog.domain.Users;
 import com.study.blog.dto.SessionUser;
 import com.study.blog.mapper.UserMapper;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.Authentication;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
-
 import javax.servlet.http.HttpSession;
 import java.util.HashMap;
 import java.util.Map;

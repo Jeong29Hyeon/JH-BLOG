@@ -11,8 +11,8 @@ import java.util.Map;
 
 @Service
 public class ImageService {
-    private final String path = "c://upload/blog/image";
-    private final String postPath = "c://upload/blog/post";
+    private final String path = "/home/hosting_users/sian0369/www/tomcat/webapps/upload/blog/images";
+    private final String postPath = "/home/hosting_users/sian0369/www/tomcat/webapps/upload/blog/post";
 
     public String uploadImage(MultipartFile file) {
         if(file == null || file.isEmpty()) {

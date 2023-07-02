@@ -1,6 +1,4 @@
 package com.study.blog.domain;
-import com.study.blog.oauth2.Role;
-import com.study.blog.oauth2.SocialType;
 import lombok.*;
 
 @Getter
@@ -25,9 +23,5 @@ public class Users {
         this.socialId = socialId;
         this.nickname = nickname;
         this.imageUrl = imageUrl;
-    }
-
-    public String getRoleKey() {
-        return this.role.getKey();
     }
 }

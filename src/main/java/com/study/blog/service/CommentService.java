@@ -12,8 +12,8 @@ import java.util.List;
 public class CommentService {
     private final CommentMapper commentMapper;
 
-    public Long save(final CommentRequest commentRequest) {
-        commentMapper.save(commentRequest);
+    public Long saveReply(final CommentRequest commentRequest) {
+        commentMapper.saveReply(commentRequest);
         return commentRequest.getId();
     }
 
@@ -39,5 +39,9 @@ public class CommentService {
 
     public CommentResponse findOne(Long commentId) {
         return commentMapper.findOne(commentId);
+    }
+
+    public void saveComment(CommentRequest commentRequest) {
+        commentMapper.saveComment(commentRequest);
     }
 }

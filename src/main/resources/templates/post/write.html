@@ -96,7 +96,7 @@
                         const formData = new FormData();
                         formData.append('postImage', blob);
 
-                        let url = '/image/post/';
+                        let url = 'https://jhblogimage.s3.ap-northeast-2.amazonaws.com/';
                         $.ajax({
                             type: 'POST',
                             enctype: 'multipart/form-data',
@@ -115,11 +115,6 @@
                                 callback(url, data.originalFileName);
                             },
                             error: function (jqXHR) {
-                                if(jqXHR.status === 403) {
-                                    alert('세션이 만료되어 로그인화면으로 이동합니다.')
-                                    location.href='/oauth2-login';
-                                    return;
-                                }
                                 alert(jqXHR.responseJSON.msg)
                             }
                         });
@@ -184,13 +179,7 @@
                 },
 
                 error : function (jqXHR) {
-                    if(jqXHR.status === 403) {
-                        alert('세션이 만료되어 로그인화면으로 이동합니다.')
-                        location.href='/oauth2-login';
-                        return;
-                    }
                     alert(jqXHR.responseJSON.errorMsg);
-                    console.log(jqXHR.responseJSON)
                 }
             })
         }

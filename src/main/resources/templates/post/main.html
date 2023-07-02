@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="ko" xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
       layout:decorate="~{layout/BlogLayout}">
 <th:block layout:fragment="title">
     <title>블로그 메인</title>
@@ -66,7 +65,7 @@
                 </form>
 
                 <!-- 글 쓰기 버튼 -->
-                <p sec:authorize="hasRole('ROLE_USER')" class="my-1 d-flex flex-row-reverse"><a th:href="@{/post/write}" class="btn btn-outline-info">글쓰기</a>
+                <p th:if="${session.user != null && session.user.role.name() == 'USER'}" class="my-1 d-flex flex-row-reverse"><a th:href="@{/post/write}" class="btn btn-outline-info">글쓰기</a>
                 </p>
                 <section>
                     <!-- Post -->
@@ -75,7 +74,7 @@
                         <div class="col-md-4 mb-4">
                             <div class="bg-image hover-overlay shadow-1-strong rounded ripple"
                                  data-mdb-ripple-color="light">
-                                <img th:src="${post.thumbnail == null} ? '/image/default.gif':'/image/'+${post.thumbnail}"
+                                <img th:src="'https://jhblogimage.s3.ap-northeast-2.amazonaws.com/'+${post.thumbnail}"
                                      class="img-fluid" alt="썸네일"/>
                                 <a href="javascript:void(0)" th:onclick="goViewPage([[${post.id}]])">
                                     <div class="mask" style="background-color: rgba(251, 251, 251, 0.15);"></div>

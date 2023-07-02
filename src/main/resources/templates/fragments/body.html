@@ -17,18 +17,6 @@
             </button>
             <div class="collapse navbar-collapse" id="navbarExample01">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                    <!-- Icons -->
-                    <li class="nav-item me-3 me-lg-0">
-                        <a class="nav-link" href="https://velog.io/@jeong29hyeon" rel="nofollow" target="_blank">
-                            <i class="fa-solid fa-blog"></i>
-                        </a>
-                    </li>
-                    <li class="nav-item me-3 me-lg-0">
-                        <a class="nav-link" href="https://github.com/Jeong29Hyeon/JH-BLOG" rel="nofollow"
-                           target="_blank">
-                            <i class="fab fa-github"></i>
-                        </a>
-                    </li>
                 </ul>
 
                 <ul class="navbar-nav d-flex flex-row">
@@ -49,6 +37,18 @@
                             </div>
                             <!-- 드롭다운 끝 -->
                         </div>
+                    </li>
+                    <!-- Icons -->
+                    <li class="nav-item me-3 me-lg-0">
+                        <a class="nav-link" href="https://velog.io/@jeong29hyeon" rel="nofollow" target="_blank">
+                            <i class="fa-solid fa-blog"></i>
+                        </a>
+                    </li>
+                    <li class="nav-item me-3 me-lg-0">
+                        <a class="nav-link" href="https://github.com/Jeong29Hyeon/JH-BLOG" rel="nofollow"
+                           target="_blank">
+                            <i class="fab fa-github"></i>
+                        </a>
                     </li>
                 </ul>
             </div>
@@ -134,10 +134,7 @@
                 location.reload()
             },
             error: function (jqXHR) {
-                if(jqXHR.status === 403) {
-                    alert('세션이 만료되어 로그인화면으로 이동합니다.')
-                    location.href='/oauth2-login';
-                }
+                alert(jqXHR.responseJSON.errorMsg)
             }
         })
     }

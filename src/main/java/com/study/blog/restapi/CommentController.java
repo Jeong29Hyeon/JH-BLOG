@@ -36,8 +36,12 @@ public class CommentController {
             @PathVariable final Long postId,
             @RequestBody final CommentRequest commentRequest) {
         log.info("CommentController.saveComment() => 파라미터 : "+ commentRequest.toString());
+        if(commentRequest.getParentId() == 0L) {
+            commentService.saveComment(commentRequest);
+        } else {
+            commentService.saveReply(commentRequest);
+        }
         Map<String,Object> response = new HashMap<>();
-        commentService.save(commentRequest);
         response.put("msg","댓글이 저장되었습니다.");
         return response;
     }

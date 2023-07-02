@@ -2,15 +2,13 @@ package com.study.blog.mapper;
 
 import com.study.blog.domain.comment.CommentRequest;
 import com.study.blog.domain.comment.CommentResponse;
-import org.apache.ibatis.annotations.Delete;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Select;
-import org.apache.ibatis.annotations.Update;
+import org.apache.ibatis.annotations.*;
+
 import java.util.List;
 
 @Mapper
 public interface CommentMapper {
-    void save(CommentRequest commentRequest);
+    void saveReply(CommentRequest commentRequest);
 
     List<CommentResponse> findComments(Long postId);
 
@@ -26,4 +24,6 @@ public interface CommentMapper {
     void update(CommentRequest commentRequest);
 
     CommentResponse findOne(Long commentId);
+
+    void saveComment(CommentRequest commentRequest);
 }

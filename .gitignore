@@ -5,8 +5,9 @@ build/
 !**/src/main/**/build/
 !**/src/test/**/build/
 
-### SPRING SECURITY OAUTH2 INFO ###
-/src/main/resources/application-oauth.yml
+### SPRING SECURITY FILE ###
+/src/main/resources/application-dbsource.yml
+/src/main/resources/application-cloud.yml
 
 ### STS ###
 .apt_generated

@@ -1,4 +1,4 @@
-package com.study.blog.oauth2;
+package com.study.blog.domain;
 
 
 public enum SocialType {

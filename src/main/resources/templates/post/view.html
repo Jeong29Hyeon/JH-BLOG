@@ -18,6 +18,25 @@
         tags.tagify {
             border: none;
         }
+        .toastui-editor-contents h1 {
+            font-size: 30px; !important;
+        }
+        .toastui-editor-contents h2 {
+            font-size: 27px; !important;
+        }
+        .toastui-editor-contents h2 {
+            font-size: 24px; !important;
+        }
+        .toastui-editor-contents h3 {
+            font-size: 21px; !important;
+        }
+        .toastui-editor-contents p {
+            font-size: 16px; !important;
+        }
+        .toastui-editor-contents span {
+            font-size: 13px; !important;
+        }
+
     </style>
 </th:block>
 <th:block layout:fragment="content">
@@ -228,14 +247,16 @@
                     <span class="me-auto">${row.user.nickname}</span>
                     <span class="text-muted" style="font-size:12px;">${dayjs(row.createdDate).format('YYYY-MM-DD HH:mm')}</span>
                 </div>
-                <div class="ms-4 mt-2 d-flex flex-row">
+                <div class="ms-4 mt-2 d-flex flex-column">
                     <p class="me-auto">${row.content}</p>`;
                 commentHtml += (sessionId === row.user.id || sessionRole === 'USER') ?`
-                    <div class="btn-group-sm d-flex">
+                    <div class="btn-group-sm d-flex justify-content-end">
                         <button type="button" onclick="openModal(${row.id})" class="btn btn-outline-secondary">수정</button>
-                        <button type="button" onclick="deleteComment(${row.id})" class="btn btn-outline-secondary">삭제</button>` : '';
-                commentHtml += (sessionId === null && row.depth === 1) ?`
-                    </div></div></div>`:`<button type="button" onclick="openReplyModal(${row.id})" class="btn btn-outline-secondary"><i class="fa-regular fa-comment-dots fa-xl"></i></button></div></div></div>`;
+                        <button type="button" onclick="deleteComment(${row.id})" class="btn btn-outline-secondary">삭제</button>`
+                    : '<div class="btn-group-sm d-flex justify-content-end">';
+                commentHtml += (sessionId !== null && row.depth === 1) ?`
+                    <button type="button" onclick="openReplyModal(${row.id})" class="btn btn-outline-secondary"><i class="fa-regular fa-comment-dots fa-xl"></i></button></div></div></div>`
+                    :`</div></div></div>`;
 
             })
             document.querySelector('.cm_list').innerHTML = commentHtml;

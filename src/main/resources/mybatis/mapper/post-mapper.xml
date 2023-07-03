@@ -67,30 +67,36 @@
             </choose>
         </if>
         <if test="hashtag == null or hashtag == ''">
-            <if test="keyword != null and keyword != ''">
-                <choose>
-                    <!-- searchType이 있을 때 -->
-                    <when test="searchType != null and searchType != ''">
-                        <choose>
-                            <when test="searchType.equals('title')">
-                                where delete_yn = 0
-                                AND p.title LIKE CONCAT('%',#{keyword},'%')
-                            </when>
-                            <when test="searchType.equals('content')">
-                                where delete_yn = 0
-                                AND p.content LIKE CONCAT('%',#{keyword},'%')
-                            </when>
-                        </choose>
-                    </when>
-                    <otherwise>
-                        where delete_yn = 0
-                        AND (
-                        p.title LIKE CONCAT('%',#{keyword},'%')
-                        OR p.content LIKE CONCAT('%',#{keyword},'%')
-                        )
-                    </otherwise>
-                </choose>
-            </if>
+            <choose>
+                <when test="keyword != null and keyword != ''">
+                    <choose>
+                        <!-- searchType이 있을 때 -->
+                        <when test="searchType != null and searchType != ''">
+                            <choose>
+                                <when test="searchType.equals('title')">
+                                    where delete_yn = 0
+                                    AND p.title LIKE CONCAT('%',#{keyword},'%')
+                                </when>
+                                <when test="searchType.equals('content')">
+                                    where delete_yn = 0
+                                    AND p.content LIKE CONCAT('%',#{keyword},'%')
+                                </when>
+                            </choose>
+                        </when>
+                        <otherwise>
+                            where delete_yn = 0
+                            AND (
+                            p.title LIKE CONCAT('%',#{keyword},'%')
+                            OR p.content LIKE CONCAT('%',#{keyword},'%')
+                            )
+                        </otherwise>
+                    </choose>
+                </when>
+                <otherwise>
+                    where delete_yn = 0
+                </otherwise>
+            </choose>
+
         </if>
     </sql>
 

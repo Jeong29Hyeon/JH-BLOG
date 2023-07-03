@@ -1,4 +1,4 @@
-package com.study.blog.domain;
+package com.study.blog.domain.hashtag;
 
 import lombok.*;
 

@@ -18,6 +18,9 @@ public interface UserMapper {
     @Update("update users set nickname = #{nickname} where id=#{id}")
     int update(Users user);
 
+    @Update("update users set image_url = #{imageUrl} where id=#{id}")
+    int updateLoginUserInfo(Users user);
+
     int save(Users newUser);
 
     @Select("select * from users where id=#{userId}")

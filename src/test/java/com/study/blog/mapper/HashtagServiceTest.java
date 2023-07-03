@@ -1,6 +1,6 @@
 package com.study.blog.mapper;
 
-import com.study.blog.domain.Hashtag;
+import com.study.blog.domain.hashtag.Hashtag;
 import com.study.blog.domain.post.PostRequest;
 import com.study.blog.domain.post.PostResponse;
 import com.study.blog.dto.SearchDto;

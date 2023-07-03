@@ -10,4 +10,12 @@
     <select id="findByName" parameterType="String" resultType="Hashtag">
         select * from hashtag where name = #{name};
     </select>
+    <select id="findAll" resultType="HashtagResponse">
+        select hashtag.id as id,
+               hashtag.name as name,
+               count(*) as count
+        from hashtag inner join post_tag pt on hashtag.id = pt.tag_id
+        group by hashtag.id
+        order by hashtag.id
+    </select>
 </mapper>

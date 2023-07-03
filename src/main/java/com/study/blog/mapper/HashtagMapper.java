@@ -1,11 +1,11 @@
 package com.study.blog.mapper;
 
-import com.study.blog.domain.Hashtag;
+import com.study.blog.domain.hashtag.Hashtag;
+import com.study.blog.domain.hashtag.HashtagResponse;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 
 import java.util.List;
-import java.util.Optional;
 
 @Mapper
 public interface HashtagMapper {
@@ -15,6 +15,6 @@ public interface HashtagMapper {
 
     void deleteByName(String name);
 
-    @Select(value = "select * from hashtag")
-    List<Hashtag> findAll();
+    List<HashtagResponse> findAll();
+
 }

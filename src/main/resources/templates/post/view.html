@@ -25,8 +25,12 @@
         <h1 class="text-center" th:text="${post.title}"></h1>
         <div class="d-flex flex-column gap-2 mt-4">
             <p class="d-flex align-items-center">
-                <span class="fw-bold me-1">정현 ·</span><span style="font-size: 13px"
-                                                            th:text="${#temporals.format(post.createdDate,'yyyy년 M월 d일 HH시 mm분')}"></span>
+                <span class="fw-bold me-1">정현 ·</span>
+                <span class="me-auto" style="font-size: 13px" th:text="${#temporals.format(post.createdDate,'yyyy년 M월 d일 HH시 mm분')}"></span>
+                <button type="button" id="likeBtn" class="btn btn-outline-danger border-0 p-1"
+                         th:disabled="${session.user == null} ? 'disabled'">
+                    <i id="heart" class="fa-regular fa-heart"> <span id="likeCnt" style="font-size: 13px" th:text="${post.likeCnt}">2</span>
+                    </i></button>
             </p>
         </div>
         <div class="mb-5">
@@ -103,9 +107,34 @@
         /*<![CDATA[*/
         const {Editor} = toastui;
         const {codeSyntaxHighlight, colorSyntax} = Editor.plugin;
+        const userId = [[${session.user == null} ? null : ${session.user.id}]];
+        const postId = [[${post.id}]];
         window.onload = () => {
             createContent();
             findAllComment();
+            addLikeBtnEvent();
+        }
+        function addLikeBtnEvent() {
+            document.getElementById('likeBtn').addEventListener('click',() => {
+                likeHit();
+            });
+            if(userId != null) {
+                $.ajax({
+                    url:`/like-check?userId=${userId}&postId=${postId}`,
+                    type:'get',
+                    async: false,
+                    success: function (response) {
+                        if(response.result === 1) {
+                            let heartIcon = $('#heart');
+                            heartIcon.removeClass('fa-regular');
+                            heartIcon.addClass('fa-solid');
+                        }
+                    },
+                    error: function () {
+                        alert("에러가 발생했습니다.")
+                    }
+                })
+            }
         }
 
         // 해시태그 라이브러리 Tagify 사용
@@ -129,8 +158,7 @@
         }
 
         function deletePost() {
-            const id = [[${post.id}]];
-            if (!confirm(id + '번 포스트를 삭제할까요?')) {
+            if (!confirm(postId + '번 포스트를 삭제할까요?')) {
                 return false;
             }
             let inputHtml = '';
@@ -156,7 +184,6 @@
 
         // 전체 댓글 조회
         function findAllComment() {
-            const postId = [[${post.id}]];
             const uri = `/posts/${postId}/comments`;
             const commentList = callApi(uri,'','get');
             drawComments(commentList);
@@ -175,7 +202,7 @@
                     json = response;
                 },
                 error: function (jqXHR) {
-                    alert('오류가 발생했습니다.')
+                    alert(jqXHR.responseJSON.msg)
                 }
             });
             return json;
@@ -183,7 +210,6 @@
 
         // 댓글 HTML draw
         function drawComments(list) {
-            console.log(list)
             if (!list.length) {
                 document.querySelector('.cm_list').innerHTML = '<div><p>등록된 댓글이 없습니다.</p></div>';
                 return false;
@@ -240,7 +266,6 @@
                 return false;
             }
 
-            const postId = [[${post.id}]];
             const writer = document.getElementById('writerId').value;
             const params = {
                 postId: postId,
@@ -251,22 +276,24 @@
             }
             const uri = `/posts/${postId}/comments`;
             const response = callApi(uri, params,'post');
-            alert(response.msg);
+            if(response.msg) {
+                alert(response.msg)
+            }
             content.value = '';
             document.getElementById('counter').innerText = '0/300자';
             findAllComment(); //댓글 입력 후 댓글의 1페이지를 봐야함
         }
 
         function deleteComment(commentId) {
-            const postId = [[${post.id}]];
             const uri = `/posts/${postId}/comments/${commentId}`;
             const response = callApi(uri,"",'delete');
-            alert(response.msg);
+            if(response.msg) {
+                alert(response.msg)
+            }
             findAllComment();
         }
 
         function openModal(id) {
-            const postId = [[${post.id}]];
             const uri = `/posts/${postId}/comments/${id}`;
             const response = callApi(uri,"",'get');
             document.querySelector('#modal-title').innerText = '댓글 수정';
@@ -285,7 +312,6 @@
         }
 
         function saveReply(id) {
-            const postId = [[${post.id}]];
             const uri = `/posts/${postId}/comments`;
             const content = document.getElementById('modalContent');
             const modalWriter = document.getElementById('modalWriter');
@@ -297,7 +323,9 @@
                 depth : 2
             }
             let response = callApi(uri,params,'post');
-            alert(response.msg);
+            if(response.msg) {
+                alert(response.msg)
+            }
             content.value = '';
             $('#commentUpdateModal').modal('hide')
             findAllComment();
@@ -310,7 +338,6 @@
                 modalContent.focus();
                 return false;
             }
-            const postId = [[${post.id}]];
             const uri = `/posts/${postId}/comments/${id}`
             const params = {
                 id : id,
@@ -318,9 +345,33 @@
                 content : modalContent.value
             }
             let response = callApi(uri,params,'patch');
-            alert(response.msg)
+            if(response.msg) {
+                alert(response.msg)
+            }
             $('#commentUpdateModal').modal('hide')
             findAllComment();
+        }
+
+        function likeHit() {
+            let userId = [[${session.user == null} ? null : ${session.user.id}]];
+            const uri = '/like-hit';
+            let heartIcon = $('#heart');
+            const params = {
+                userId : userId,
+                postId : postId
+            }
+            let response = callApi(uri,params,'post');
+            if(response.result === 1) {
+                heartIcon.removeClass('fa-regular');
+                heartIcon.addClass('fa-solid');
+            } else if(response.result === -1) {
+                heartIcon.removeClass('fa-solid');
+                heartIcon.addClass('fa-regular');
+            }
+            if(response.msg) {
+               alert(response.msg)
+            }
+            $('#likeCnt').load(location.href + " #likeCnt")
         }
         /*]]>*/
     </script>

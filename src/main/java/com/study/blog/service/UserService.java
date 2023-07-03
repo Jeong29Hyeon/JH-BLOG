@@ -103,27 +103,16 @@ public class UserService {
                 JSONObject profile = (JSONObject) kakao_account.get("profile");
                 boolean email_needs_agreement = (boolean) kakao_account.get("email_needs_agreement");
                 boolean profile_image_needs_agreement = (boolean) kakao_account.get("profile_image_needs_agreement");
-                String id = obj.get("id").toString();
-                user.setSocialId(id);
-                user.setSocialType(SocialType.KAKAO);
-                //이미 서버에 등록돼있는 유저인지 체크
-                Map<String,Object> map = new HashMap<>();
-                map.put("socialType",user.getSocialType());
-                map.put("socialId",user.getSocialId());
-                Users findUser = userMapper.findBySocialTypeAndSocialId(map);
-                if(findUser != null) {
-                    return findUser;
-                }
-                String nickname = profile.get("nickname").toString();
-                user.setNickname(nickname);
-                user.setRole(Role.GUEST);
+                String socialId = obj.get("id").toString();
+
+                // 프로필 이미지 설정
                 if(!profile_image_needs_agreement) { //프로필 이미지 동의가 필요한가? (false) 면 이미 동의가 돼있는 것이니 가져올 수 있다.
                     String imageUrl = profile.get("thumbnail_image_url").toString();
                     user.setImageUrl(imageUrl);
                 } else {
                     user.setImageUrl("https://ssl.pstatic.net/static/pwe/address/img_profile.png");
                 }
-
+                // 이메일 설정
                 if(!email_needs_agreement){//이메일 동의가 필요한가 -> false 면 이메일이 있음
                     String email = kakao_account.get("email").toString();
                     user.setEmail(email);
@@ -131,6 +120,22 @@ public class UserService {
                     String uuid = UUID.randomUUID().toString().substring(0,10);
                     user.setEmail(uuid+"@socialUser.com");
                 }
+                // 소셜로그인 PK
+                user.setSocialId(socialId);
+                user.setSocialType(SocialType.KAKAO);
+                String nickname = profile.get("nickname").toString();
+                user.setNickname(nickname);
+                //이미 서버에 등록돼있는 유저인지 체크
+                Map<String,Object> map = new HashMap<>();
+                map.put("socialType",user.getSocialType());
+                map.put("socialId",user.getSocialId());
+                Users findUser = userMapper.findBySocialTypeAndSocialId(map);
+                if(findUser != null) {
+                    findUser.setImageUrl(user.getImageUrl()); //있는 유저일시 프로필 이미지 최신화
+                    userMapper.updateLoginUserInfo(findUser);
+                    return findUser;
+                }
+                user.setRole(Role.GUEST);
                 userMapper.save(user);
             }
         } catch (IOException | ParseException e) {

@@ -18,11 +18,13 @@
                 margin-top: 45px;
             }
         }
-        .tagList a{
+
+        .tagList a {
             color: black;
             text-decoration: none;
 
         }
+
         .tagList a:hover {
             text-decoration-line: underline;
         }
@@ -51,9 +53,11 @@
                                 <div class="form-outline">
                                     <input type="text" id="keyword" name="keyword" class="form-control"/>
                                     <label class="form-label" for="keyword"
-                                           th:text="${searchDto.keyword == '' || searchDto.keyword == null} ? '키워드를 입력하세요' : ${searchDto.keyword}">키워드를 입력하세요</label>
+                                           th:text="${searchDto.keyword == '' || searchDto.keyword == null} ? '키워드를 입력하세요' : ${searchDto.keyword}">키워드를
+                                        입력하세요</label>
                                 </div>
-                                <button type="button" id="searchBtn" class="btn btn-primary" onclick="searchViaKeyword()">
+                                <button type="button" id="searchBtn" class="btn btn-primary"
+                                        onclick="searchViaKeyword()">
                                     <i class="fas fa-search"></i>
                                 </button>
                                 <button type="button" class="btn btn-secondary" onclick="location.href='/post'">
@@ -65,7 +69,8 @@
                 </form>
 
                 <!-- 글 쓰기 버튼 -->
-                <p th:if="${session.user != null && session.user.role.name() == 'USER'}" class="my-1 d-flex flex-row-reverse"><a th:href="@{/post/write}" class="btn btn-outline-info">글쓰기</a>
+                <p th:if="${session.user != null && session.user.role.name() == 'USER'}"
+                   class="my-1 d-flex flex-row-reverse"><a th:href="@{/post/write}" class="btn btn-outline-info">글쓰기</a>
                 </p>
                 <section>
                     <!-- Post -->
@@ -81,17 +86,21 @@
                                 </a>
                             </div>
                         </div>
-
                         <div class="col-md-8 mb-4 d-flex flex-column">
-                            <h5 th:text="${post.title}">포스트 제목</h5>
-                            <p th:text="${post.description}" style="font-size: 0.8rem">
-                                포스트 설명글
-                            </p>
+                            <a th:onclick="goViewPage([[${post.id}]])" href="javascript:void(0)" style="color:black;">
+                                <h5 th:text="${post.title}">포스트 제목</h5>
+                                <p th:text="${post.description}" style="font-size: 0.8rem">
+                                    포스트 설명글
+                                </p>
+                            </a>
                             <div class="mt-auto">
-                                <a href="javascript:void(0)" th:onclick="goViewPage([[${post.id}]])"
-                                   class="btn btn-outline-primary">보러 가기</a>
+                                <div class="d-flex align-items-center">
+                                        <span class="text-muted me-auto"
+                                              th:text="${#temporals.format(post.createdDate,'yyyy-MM-dd HH:mm')}"
+                                              style="font-size: 13px;">작성시간</span>
+                                        <i class="fa-solid fa-heart" style="color:#dc4c64"> <span style="font-size: 10px"th:text="${post.likeCnt}"></span></i>
+                                </div>
                             </div>
-
                         </div>
                     </div>
                 </section>
@@ -100,15 +109,22 @@
                 <nav th:if="${searchDto.pagination != null}" class="my-4" aria-label="...">
                     <ul class="pagination pagination-circle justify-content-center">
                         <li th:if="${searchDto.pagination.existPrevPage}" class="page-item">
-                            <a class="page-link" href="javascript: void(0)" th:onclick="movePage(1)"  tabindex="-1" aria-disabled="true">첫페이지</a>
-                            <a class="page-link" href="javascript: void(0)" th:onclick="movePage([[${(searchDto.pagination.startPage)-1}]])"  tabindex="-1" aria-disabled="true">이전</a>
+                            <a class="page-link" href="javascript: void(0)" th:onclick="movePage(1)" tabindex="-1"
+                               aria-disabled="true">첫페이지</a>
+                            <a class="page-link" href="javascript: void(0)"
+                               th:onclick="movePage([[${(searchDto.pagination.startPage)-1}]])" tabindex="-1"
+                               aria-disabled="true">이전</a>
                         </li>
-                        <li th:each="page : ${searchDto.pagination.pageList}" th:class="${page == searchDto.page} ? 'page-item active':'page-item'" aria-current="page">
-                            <a class="page-link" href="javascript: void(0)" th:onclick="movePage([[${page}]])" th:text="${page}"></a>
+                        <li th:each="page : ${searchDto.pagination.pageList}"
+                            th:class="${page == searchDto.page} ? 'page-item active':'page-item'" aria-current="page">
+                            <a class="page-link" href="javascript: void(0)" th:onclick="movePage([[${page}]])"
+                               th:text="${page}"></a>
                         </li>
                         <li th:if="${searchDto.pagination.existNextPage}" class="page-item">
-                            <a class="page-link" href="javascript: void(0)" th:onclick="movePage([[${(searchDto.pagination.endPage)+1}]])">다음</a>
-                            <a class="page-link" href="javascript: void(0)" th:onclick="movePage([[${(searchDto.pagination.totalPageSize)}]])">마지막페이지</a>
+                            <a class="page-link" href="javascript: void(0)"
+                               th:onclick="movePage([[${(searchDto.pagination.endPage)+1}]])">다음</a>
+                            <a class="page-link" href="javascript: void(0)"
+                               th:onclick="movePage([[${(searchDto.pagination.totalPageSize)}]])">마지막페이지</a>
                         </li>
                     </ul>
                 </nav>
@@ -121,10 +137,13 @@
                         <hr>
                         <div class="tagList">
                             <div class="d-flex flex-column align-items-start gap-1" th:unless="${hashtags.isEmpty()}">
-                                <a href="/post" th:style="${searchDto.hashtag == null} ? 'color:#20C997;':''">전체보기</a>
-                                <a href="javascript: void(0)" th:each="hashtag:${hashtags}"
-                                   th:style="${searchDto.hashtag != null} ? (${searchDto.hashtag == hashtag.name} ? 'color:#20C997;' : '') : ''"
-                                   th:onclick="searchViaTag([[${hashtag.name}]])" th:text="'#'+${hashtag.name}"></a>
+                                <a href="/post" th:style="${searchDto.hashtag == null || searchDto.hashtag == ''} ? 'color:#20C997;':''">전체보기</a>
+                                <div class="d-flex gap-1" th:each="hashtag:${hashtags}">
+                                    <a href="javascript: void(0)"
+                                       th:style="${searchDto.hashtag != null} ? (${searchDto.hashtag == hashtag.name} ? 'color:#20C997;' : '') : ''"
+                                       th:onclick="searchViaTag([[${hashtag.name}]])" th:text="'#'+${hashtag.name}"></a>
+                                    <span th:text="'(' + ${hashtag.count} +')'"></span>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -141,42 +160,45 @@
         function movePage(page) {
             const queryString = new URLSearchParams(location.search);
             const queryParams = {
-                page : page,
-                recordSize : 5,
-                pageSize : 5,
-                hashtag : queryString.get('hashtag') == null ? '' : queryString.get('hashtag'),
-                searchType : queryString.get('searchType') == null ? '' : queryString.get('searchType'),
+                page: page,
+                recordSize: 5,
+                pageSize: 5,
+                hashtag: queryString.get('hashtag') == null ? '' : queryString.get('hashtag'),
+                searchType: queryString.get('searchType') == null ? '' : queryString.get('searchType'),
                 keyword: queryString.get('keyword') == null ? '' : queryString.get('keyword')
             }
             location.href = location.pathname + '?' + new URLSearchParams(queryParams).toString()
         }
+
         //해시태그 검색
         function searchViaTag(hashtag) {
             const queryString = new URLSearchParams(location.search);
             const queryParams = {
-                page : 1,
-                recordSize : 5,
-                pageSize : 5,
-                hashtag : hashtag,
-                searchType : queryString.get('searchType') == null ? '' : queryString.get('searchType'),
+                page: 1,
+                recordSize: 5,
+                pageSize: 5,
+                hashtag: hashtag,
+                searchType: queryString.get('searchType') == null ? '' : queryString.get('searchType'),
                 keyword: queryString.get('keyword') == null ? '' : queryString.get('keyword')
             }
             location.href = location.pathname + '?' + new URLSearchParams(queryParams).toString()
         }
+
         //키워드 검색
         function searchViaKeyword() {
             const searchForm = document.getElementById('searchForm');
             const queryString = new URLSearchParams(location.search);
             const queryParams = {
-                page : 1,
-                recordSize : 5,
-                pageSize : 5,
-                hashtag : queryString.get('hashtag') == null ? '' : queryString.get('hashtag'),
-                searchType : searchForm.searchType.value,
+                page: 1,
+                recordSize: 5,
+                pageSize: 5,
+                hashtag: queryString.get('hashtag') == null ? '' : queryString.get('hashtag'),
+                searchType: searchForm.searchType.value,
                 keyword: searchForm.keyword.value
             }
             location.href = location.pathname + '?' + new URLSearchParams(queryParams).toString()
         }
+
         function goViewPage(postId) {
             const queryString = (location.search) ? location.search + `&id=${postId}` : `?id=${postId}`
             location.href = `/post/view${queryString}`

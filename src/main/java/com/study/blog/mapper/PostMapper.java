@@ -3,6 +3,7 @@ import com.study.blog.domain.post.PostRequest;
 import com.study.blog.domain.post.PostResponse;
 import com.study.blog.dto.SearchDto;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Update;
 
 import java.util.List;
 
@@ -41,4 +42,10 @@ public interface PostMapper {
     List<PostResponse> findAll(SearchDto searchDto);
 
     int count(SearchDto searchDto);
+
+    @Update("update post set like_cnt = like_cnt - 1 where id = #{postId}")
+    void decreaseLike(Long postId);
+
+    @Update("update post set like_cnt = like_cnt + 1 where id = #{postId}")
+    void increaseLike(Long postId);
 }

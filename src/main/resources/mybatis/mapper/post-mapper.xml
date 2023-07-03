@@ -9,7 +9,7 @@
         , description
         , thumbnail
         , content
-        , view_cnt
+        , like_cnt
         , delete_yn
         , created_date
         , modified_date
@@ -96,7 +96,7 @@
 
     <!-- 포스트 저장 -->
     <insert id="save" parameterType="PostRequest" useGeneratedKeys="true" keyProperty="id">
-        INSERT INTO post (title,description,thumbnail,content,view_cnt, delete_yn, created_date,modified_date)
+        INSERT INTO post (title,description,thumbnail,content,like_cnt, delete_yn, created_date,modified_date)
         VALUES (#{title}, #{description},#{thumbnail}, #{content}, 0, 0, NOW(), NULL)
     </insert>
 
@@ -140,7 +140,7 @@
             p.description as description,
             p.thumbnail as thumbnail,
             p.content as content,
-            p.view_cnt as viewCnt,
+            p.like_cnt as likeCnt,
             p.delete_yn as deleteYn,
             p.created_date as createdDate,
             p.modified_date as modifiedDate

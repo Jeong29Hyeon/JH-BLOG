@@ -1,6 +1,6 @@
 package com.study.blog.mapper;
 
-import com.study.blog.domain.PostTag;
+import com.study.blog.domain.hashtag.PostTag;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
@@ -17,4 +17,5 @@ public interface PostTagMapper {
     void deleteByPostIdAndTagName(Map<String,Object> map);
 
     int countByTagName(String tagName);
+
 }

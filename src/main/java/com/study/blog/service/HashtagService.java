@@ -1,12 +1,12 @@
 package com.study.blog.service;
 
-import com.study.blog.domain.Hashtag;
-import com.study.blog.domain.PostTag;
+import com.study.blog.domain.hashtag.Hashtag;
+import com.study.blog.domain.hashtag.HashtagResponse;
+import com.study.blog.domain.hashtag.PostTag;
 import com.study.blog.mapper.HashtagMapper;
 import com.study.blog.mapper.PostTagMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
 
@@ -82,7 +82,7 @@ public class HashtagService {
         }
     }
 
-    public List<Hashtag> findAll() {
+    public List<HashtagResponse> findAll() {
         return hashtagMapper.findAll();
     }
 }

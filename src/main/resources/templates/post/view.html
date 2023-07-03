@@ -217,7 +217,7 @@
 
             let commentHtml = '';
             let sessionId = [[${session.user == null} ? null : ${session.user.id}]];
-            let role = [[${session.user == null} ? null : ${session.user.role}]];
+            let sessionRole = [[${session.user == null} ? null : ${session.user.role}]];
             list.forEach(row => {
                 commentHtml += `
                 <div class="${row.depth === 2 ? 'ms-5' : ''}">
@@ -230,12 +230,12 @@
                 </div>
                 <div class="ms-4 mt-2 d-flex flex-row">
                     <p class="me-auto">${row.content}</p>`;
-                commentHtml += (sessionId === row.user.id || row.user.role === role) ?`
+                commentHtml += (sessionId === row.user.id || sessionRole === 'USER') ?`
                     <div class="btn-group-sm d-flex">
                         <button type="button" onclick="openModal(${row.id})" class="btn btn-outline-secondary">수정</button>
                         <button type="button" onclick="deleteComment(${row.id})" class="btn btn-outline-secondary">삭제</button>` : '';
-                commentHtml += (sessionId === null) ?`
-                    </div></div></div>`:`<button type="button" onclick="openReplyModal(${row.id})" class="btn btn-outline-secondary">답글달기</button></div></div></div>`;
+                commentHtml += (sessionId === null && row.depth === 1) ?`
+                    </div></div></div>`:`<button type="button" onclick="openReplyModal(${row.id})" class="btn btn-outline-secondary"><i class="fa-regular fa-comment-dots fa-xl"></i></button></div></div></div>`;
 
             })
             document.querySelector('.cm_list').innerHTML = commentHtml;

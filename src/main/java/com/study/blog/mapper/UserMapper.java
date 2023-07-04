@@ -18,11 +18,14 @@ public interface UserMapper {
     @Update("update users set nickname = #{nickname} where id=#{id}")
     int update(Users user);
 
-    @Update("update users set image_url = #{imageUrl} where id=#{id}")
+    @Update("update users set image_url = #{imageUrl},social_name = #{socialName} where id=#{id}")
     int updateLoginUserInfo(Users user);
 
     int save(Users newUser);
 
     @Select("select * from users where id=#{userId}")
     Users findById(Long userId);
+
+    @Select("select count(*) from users where nickname = #{nickname};")
+    int existNickname(String nickname);
 }

@@ -1,12 +1,15 @@
 package com.study.blog.restapi;
 
+import com.study.blog.domain.Role;
 import com.study.blog.domain.comment.CommentRequest;
 import com.study.blog.domain.comment.CommentResponse;
+import com.study.blog.dto.SessionUser;
 import com.study.blog.service.CommentService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpSession;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -50,25 +53,39 @@ public class CommentController {
     public Map<String,Object> updateComment( //댓글 수정
             @PathVariable final Long postId,
             @PathVariable final Long id,
-            @RequestBody final CommentRequest commentRequest) {
-        commentService.update(commentRequest);
+            @RequestBody final CommentRequest commentRequest,
+                                             HttpSession session) {
         Map<String,Object> response = new HashMap<>();
-        response.put("msg","댓글이 수정되었습니다.");
+        SessionUser user = (SessionUser) session.getAttribute("user");
+        CommentResponse findComment = commentService.findOne(id);
+        if(findComment.getUser().getId().equals(user.getId()) || user.getRole() == Role.USER) {
+            commentService.update(commentRequest);
+            response.put("msg","댓글이 수정되었습니다.");
+            return response;
+        }
+        response.put("msg","자기가 쓴 댓글만 수정할 수 있습니다.");
         return response;
     }
 
     //댓글 삭제
     @DeleteMapping("/posts/{postId}/comments/{id}")
     public Map<String,Object> deleteComment(@PathVariable final Long postId,
-                                            @PathVariable final Long id) {
+                                            @PathVariable final Long id,
+                                            HttpSession session) {
         Map<String,Object> response = new HashMap<>();
-        try {
-            commentService.delete(id);
-        } catch (Exception e) {
-            response.put("msg",e.getMessage());
+        SessionUser user = (SessionUser) session.getAttribute("user");
+        CommentResponse findComment = commentService.findOne(id);
+        if(findComment.getUser().getId().equals(user.getId()) || user.getRole() == Role.USER) {
+            try {
+                commentService.delete(id);
+            } catch (Exception e) {
+                response.put("msg",e.getMessage());
+                return response;
+            }
+            response.put("msg","댓글이 삭제되었습니다.");
             return response;
         }
-        response.put("msg","댓글이 삭제되었습니다.");
+        response.put("msg","자기가 쓴 댓글만 삭제할 수 있습니다.");
         return response;
     }
 

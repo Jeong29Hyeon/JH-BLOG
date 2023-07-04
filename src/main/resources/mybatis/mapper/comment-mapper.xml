@@ -3,12 +3,12 @@
 <mapper namespace="com.study.blog.mapper.CommentMapper">
     <insert id="saveReply" parameterType="CommentRequest" useGeneratedKeys="true" keyProperty="id">
         insert into comment(post_id, content, user_id, created_date, modified_date, parent_id, depth)
-        VALUES (#{postId},#{content},#{userId},NOW(),null,#{parentId},#{depth})
+        VALUES (#{postId},#{content},#{userId},NOW(),null,#{parentId},2)
     </insert>
 
     <insert id="saveComment" parameterType="CommentRequest" useGeneratedKeys="true" keyProperty="id">
         insert into comment(post_id, content, user_id, created_date, modified_date, parent_id, depth)
-        VALUES (#{postId},#{content},#{userId},NOW(),null,null,#{depth})
+        VALUES (#{postId},#{content},#{userId},NOW(),null,null,1)
     </insert>
 
     <select id="findComments" parameterType="Long" resultMap="CommentWithUser">

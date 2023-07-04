@@ -1,4 +1,5 @@
 package com.study.blog.domain;
+import jdk.nashorn.internal.runtime.Debug;
 import lombok.*;
 
 @Getter
@@ -11,17 +12,13 @@ public class Users {
     private Role role;
     private SocialType socialType;
     private String socialId;
+    private String socialName;
     private String nickname;
     private String imageUrl;
 
     @Builder
-    public Users(Long id, String email, Role role, SocialType socialType, String socialId, String nickname, String imageUrl) {
+    public Users(Long id, String nickname) {
         this.id = id;
-        this.email = email;
-        this.role = role;
-        this.socialType = socialType;
-        this.socialId = socialId;
         this.nickname = nickname;
-        this.imageUrl = imageUrl;
     }
 }

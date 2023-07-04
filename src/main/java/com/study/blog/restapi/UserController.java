@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.servlet.http.HttpSession;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 import java.util.regex.Pattern;
 
 @RestController
@@ -23,18 +24,25 @@ public class UserController {
             final String nickname,
             HttpSession session) {
         Map<String,Object> response = new HashMap<>();
+        SessionUser user = (SessionUser) session.getAttribute("user");
+
         if(!Pattern.matches("[a-z0-9가-힣]{3,12}",nickname)) {
             response.put("errorMsg","3~12자 사이의 영문 소문자와 한글만 입력가능합니다.");
             return response;
         }
-        Users users = Users.builder().id(userId).nickname(nickname).build();
+        int count = userMapper.existNickname(nickname);
+        if(count != 0) {
+            response.put("errorMsg","이미 존재하는 닉네임입니다.");
+            return response;
+        }
+        Users users = Users.builder().id(user.getId()).nickname(nickname).build();
         int result = userMapper.update(users);
         if(result != 1) {
             response.put("errorMsg","닉네임 변경에 실패했습니다.");
             return response;
         }
         response.put("msg","정상적으로 변경되었습니다.");
-        Users findUser = userMapper.findById(userId);
+        Users findUser = userMapper.findById(user.getId());
         SessionUser sessionUser = new SessionUser(findUser);
         session.setAttribute("user",sessionUser);
         return response;

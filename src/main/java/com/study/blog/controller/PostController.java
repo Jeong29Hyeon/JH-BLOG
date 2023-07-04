@@ -30,7 +30,6 @@ public class PostController {
     @GetMapping()
     public String openBlog(@ModelAttribute("searchDto") final SearchDto searchDto,
                            Model model) {
-        System.out.println("searchDto.toString() = " + searchDto.toString());
         model.addAttribute("posts", postService.findAllPost(searchDto));
         model.addAttribute("hashtags", hashtagService.findAll());
         return "post/main";

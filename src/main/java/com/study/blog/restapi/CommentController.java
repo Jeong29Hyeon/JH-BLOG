@@ -38,13 +38,17 @@ public class CommentController {
     public Map<String,Object> saveComment(
             @PathVariable final Long postId,
             @RequestBody final CommentRequest commentRequest) {
-        log.info("CommentController.saveComment() => 파라미터 : "+ commentRequest.toString());
+        Map<String,Object> response = new HashMap<>();
         if(commentRequest.getParentId() == 0L) {
             commentService.saveComment(commentRequest);
         } else {
+            CommentResponse findComment = commentService.findOne(commentRequest.getParentId());
+            if(findComment == null || findComment.getDepth() == 2) {
+                response.put("msg","해당 댓글이 존재하지 않습니다.");
+                return response;
+            }
             commentService.saveReply(commentRequest);
         }
-        Map<String,Object> response = new HashMap<>();
         response.put("msg","댓글이 저장되었습니다.");
         return response;
     }

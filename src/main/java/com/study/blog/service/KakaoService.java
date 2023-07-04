@@ -22,7 +22,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 @Slf4j
 @Service
-public class UserService {
+public class KakaoService {
     private final UserMapper userMapper;
 
     public String getKakaoAccesstoken(String authorizeCode) {

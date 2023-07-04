@@ -34,7 +34,7 @@ public class MainController {
 
     @GetMapping("/kakao-login")
     public String kakaoLogin() {
-        return "redirect:https://kauth.kakao.com/oauth/authorize?client_id=ff5fbe39cb292ecd96bd27eb8415bf9a&redirect_uri=http://sian0369.cafe24.com/login/oauth/kakao&response_type=code";
+        return "redirect:https://kauth.kakao.com/oauth/authorize?client_id=ff5fbe39cb292ecd96bd27eb8415bf9a&redirect_uri=http://jeong29hyeon.org/login/oauth/kakao&response_type=code";
     }
 
     @GetMapping("/naver-login")
@@ -51,7 +51,7 @@ public class MainController {
             SessionUser user = (SessionUser) session.getAttribute("user");
             SocialType socialType = user.getSocialType();
             if(socialType == SocialType.KAKAO) {
-                return "redirect:https://kauth.kakao.com/oauth/logout?client_id=ff5fbe39cb292ecd96bd27eb8415bf9a&logout_redirect_uri=http://sian0369.cafe24.com/logout/oauth/kakao";
+                return "redirect:https://kauth.kakao.com/oauth/logout?client_id=ff5fbe39cb292ecd96bd27eb8415bf9a&logout_redirect_uri=http://jeong29hyeon.org/logout/oauth/kakao";
             } else if(socialType == SocialType.NAVER) {
                 session.invalidate();
             }

@@ -1,5 +1,6 @@
 package com.study.blog.interceptor;
 
+import com.study.blog.domain.ErrorStatus;
 import com.study.blog.domain.Role;
 import com.study.blog.dto.SessionUser;
 import org.springframework.web.servlet.HandlerInterceptor;
@@ -12,9 +13,9 @@ public class AuthCheckInterceptor implements HandlerInterceptor {
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         SessionUser user = (SessionUser) request.getSession().getAttribute("user");
         if(user == null || user.getRole() != Role.USER) {
-            response.sendRedirect("/post");
+            response.sendRedirect("/error?code=" + ErrorStatus.NotAuthorize.getCode());
             return false;
         }
-        return HandlerInterceptor.super.preHandle(request, response, handler);
+        return true;
     }
 }

@@ -1,5 +1,6 @@
 package com.study.blog.controller;
 
+import com.study.blog.domain.ErrorStatus;
 import com.study.blog.domain.post.PostRequest;
 import com.study.blog.domain.post.PostResponse;
 import com.study.blog.dto.SearchDto;
@@ -78,6 +79,9 @@ public class PostController {
     public String viewPost(@RequestParam("id") final Long id,
                            Model model) {
         PostResponse findPost = postService.findPostById(id);
+        if(findPost == null ||findPost.getDeleteYn()) {
+            return "redirect:/error?code="+ ErrorStatus.NotFoundPost.getCode();
+        }
         model.addAttribute("post", findPost);
         model.addAttribute("hashtags", postTagMapper.findNameByPostId(id));
         return "post/view";

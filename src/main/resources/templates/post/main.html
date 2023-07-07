@@ -36,120 +36,126 @@
 <!--Main Navigation-->
 
 <th:block layout:fragment="content">
-    <div class="container">
-        <div class="row">
-            <div class="col-md-10">
-                <form id="searchForm">
-                    <div class="input-group rounded my-3">
-                        <div class="col-3 me-1">
-                            <select class="form-select rounded" id="searchType" name="searchType" title="검색 유형 선택">
-                                <option value="" th:selected="${searchDto.searchType == ''}">전체</option>
-                                <option value="title" th:selected="${searchDto.searchType == 'title'}">제목</option>
-                                <option value="content" th:selected="${searchDto.searchType == 'content'}">내용</option>
-                            </select>
-                        </div>
-                        <div class="col-8 d-flex">
-                            <div class="input-group">
-                                <div class="form-outline">
-                                    <input type="text" id="keyword" name="keyword" class="form-control"/>
-                                    <label class="form-label" for="keyword"
-                                           th:text="${searchDto.keyword == '' || searchDto.keyword == null} ? '키워드를 입력하세요' : ${searchDto.keyword}">키워드를
-                                        입력하세요</label>
-                                </div>
-                                <button type="button" id="searchBtn" class="btn btn-primary"
-                                        onclick="searchViaKeyword()">
-                                    <i class="fas fa-search"></i>
-                                </button>
-                                <button type="button" class="btn btn-secondary" onclick="location.href='/post'">
-                                    <i class="fa fa-undo"></i>
-                                </button>
+    <div class="row">
+        <div class="col-md-10">
+            <form id="searchForm">
+                <div class="input-group rounded my-3">
+                    <div class="col-3 me-1">
+                        <select class="form-select rounded" id="searchType" name="searchType" title="검색 유형 선택">
+                            <option value="" th:selected="${searchDto.searchType == ''}">전체</option>
+                            <option value="title" th:selected="${searchDto.searchType == 'title'}">제목</option>
+                            <option value="content" th:selected="${searchDto.searchType == 'content'}">내용</option>
+                        </select>
+                    </div>
+                    <div class="col-8 d-flex">
+                        <div class="input-group">
+                            <div class="form-outline">
+                                <input type="text" id="keyword" name="keyword" class="form-control"/>
+                                <label class="form-label" for="keyword"
+                                       th:text="${searchDto.keyword == '' || searchDto.keyword == null} ? '키워드를 입력하세요' : ${searchDto.keyword}">키워드를
+                                    입력하세요</label>
                             </div>
+                            <button type="button" id="searchBtn" class="btn btn-primary"
+                                    onclick="searchViaKeyword()">
+                                <i class="fas fa-search"></i>
+                            </button>
+                            <button type="button" class="btn btn-secondary" onclick="location.href='/post'">
+                                <i class="fa fa-undo"></i>
+                            </button>
                         </div>
                     </div>
-                </form>
+                </div>
+            </form>
 
-                <!-- 글 쓰기 버튼 -->
-                <p th:if="${session.user != null && session.user.role.name() == 'USER'}"
-                   class="my-1 d-flex flex-row-reverse"><a th:href="@{/post/write}" class="btn btn-outline-info">글쓰기</a>
-                </p>
-                <section>
-                    <!-- Post -->
-                    <h3 class="text-center" th:if="${posts.isEmpty()}">포스트가 존재하지 않습니다.</h3>
-                    <div class="row" th:each="post : ${posts}">
-                        <div class="col-md-4 mb-4">
-                            <div class="bg-image hover-overlay shadow-1-strong rounded ripple"
-                                 data-mdb-ripple-color="light">
-                                <img th:src="'https://jhblogimage.s3.ap-northeast-2.amazonaws.com/'+${post.thumbnail}"
-                                     class="img-fluid" alt="썸네일"/>
-                                <a href="javascript:void(0)" th:onclick="goViewPage([[${post.id}]])">
-                                    <div class="mask" style="background-color: rgba(251, 251, 251, 0.15);"></div>
-                                </a>
-                            </div>
-                        </div>
-                        <div class="col-md-8 mb-4 d-flex flex-column">
-                            <a th:onclick="goViewPage([[${post.id}]])" href="javascript:void(0)" style="color:black;">
-                                <h5 th:text="${post.title}">포스트 제목</h5>
-                                <p th:text="${post.description}" style="font-size: 0.8rem">
-                                    포스트 설명글
-                                </p>
+            <!-- 글 쓰기 버튼 -->
+            <p th:if="${session.user != null && session.user.role.name() == 'USER'}"
+               class="my-1 d-flex flex-row-reverse"><a th:href="@{/post/write}" class="btn btn-outline-info">글쓰기</a>
+            </p>
+            <section>
+                <!-- Post -->
+                <h3 class="text-center" th:if="${posts.isEmpty()}">포스트가 존재하지 않습니다.</h3>
+                <div class="row" th:each="post : ${posts}">
+                    <div class="col-md-4 mb-4">
+                        <div class="bg-image hover-overlay shadow-1-strong rounded ripple"
+                             data-mdb-ripple-color="light">
+                            <img th:src="'https://jhblogimage.s3.ap-northeast-2.amazonaws.com/'+${post.thumbnail}"
+                                 class="img-fluid w-100 h-100" alt="썸네일"/>
+                            <a href="javascript:void(0)" th:onclick="goViewPage([[${post.id}]])">
+                                <div class="mask" style="background-color: rgba(251, 251, 251, 0.15);"></div>
                             </a>
-                            <div class="mt-auto">
-                                <div class="d-flex align-items-center">
-                                        <span class="text-muted me-auto"
-                                              th:text="${#temporals.format(post.createdDate,'yyyy-MM-dd HH:mm')}"
-                                              style="font-size: 13px;">작성시간</span>
-                                        <i class="fa-solid fa-heart" style="color:#dc4c64"> <span style="font-size: 10px"th:text="${post.likeCnt}"></span></i>
-                                </div>
+                        </div>
+                    </div>
+                    <div class="col-md-8 mb-4 d-flex flex-column">
+                        <a th:onclick="goViewPage([[${post.id}]])" href="javascript:void(0)" style="color:black;">
+                            <h5 th:text="${post.title}">포스트 제목</h5>
+                            <p th:text="${post.description}" style="font-size: 0.8rem">
+                                포스트 설명글
+                            </p>
+                        </a>
+                        <div class="mt-auto">
+                            <div class="d-flex align-items-center gap-3">
+                                <span class="text-muted me-auto">
+                                    <img th:src="@{/images/admin.png}"
+                                         alt="출처 flaticon" class="img-fluid rounded-9" style="max-height: 30px;">
+                                    정현
+                                </span>
+                                <span class="text-muted"
+                                      th:text="${#temporals.format(post.createdDate,'yyyy-MM-dd HH:mm')}"
+                                      style="font-size: 13px;">작성시간</span>
+                                <i class="fa-solid fa-heart me-5" style="color:#dc4c64">
+                                    <span style="font-size: 10px" th:text="${post.likeCnt}"></span>
+                                </i>
                             </div>
                         </div>
                     </div>
-                </section>
+                </div>
+            </section>
 
-                <!-- Pagination -->
-                <nav th:if="${searchDto.pagination != null}" class="my-4" aria-label="...">
-                    <ul class="pagination pagination-circle justify-content-center">
-                        <li th:if="${searchDto.pagination.existPrevPage}" class="page-item">
-                            <a class="page-link" href="javascript: void(0)" th:onclick="movePage(1)" tabindex="-1"
-                               aria-disabled="true">첫페이지</a>
-                            <a class="page-link" href="javascript: void(0)"
-                               th:onclick="movePage([[${(searchDto.pagination.startPage)-1}]])" tabindex="-1"
-                               aria-disabled="true">이전</a>
-                        </li>
-                        <li th:each="page : ${searchDto.pagination.pageList}"
-                            th:class="${page == searchDto.page} ? 'page-item active':'page-item'" aria-current="page">
-                            <a class="page-link" href="javascript: void(0)" th:onclick="movePage([[${page}]])"
-                               th:text="${page}"></a>
-                        </li>
-                        <li th:if="${searchDto.pagination.existNextPage}" class="page-item">
-                            <a class="page-link" href="javascript: void(0)"
-                               th:onclick="movePage([[${(searchDto.pagination.endPage)+1}]])">다음</a>
-                            <a class="page-link" href="javascript: void(0)"
-                               th:onclick="movePage([[${(searchDto.pagination.totalPageSize)}]])">마지막페이지</a>
-                        </li>
-                    </ul>
-                </nav>
-            </div>
-            <div class="col-md-2">
-                <!--Section: Sidebar-->
-                <section class="sticky-top " style="top: 170px;">
-                    <div>
-                        태그 목록
-                        <hr>
-                        <div class="tagList">
-                            <div class="d-flex flex-column align-items-start gap-1" th:unless="${hashtags.isEmpty()}">
-                                <a href="/post" th:style="${searchDto.hashtag == null || searchDto.hashtag == ''} ? 'color:#20C997;':''">전체보기</a>
-                                <div class="d-flex gap-1" th:each="hashtag:${hashtags}">
-                                    <a href="javascript: void(0)"
-                                       th:style="${searchDto.hashtag != null} ? (${searchDto.hashtag == hashtag.name} ? 'color:#20C997;' : '') : ''"
-                                       th:onclick="searchViaTag([[${hashtag.name}]])" th:text="'#'+${hashtag.name}"></a>
-                                    <span th:text="'(' + ${hashtag.count} +')'"></span>
-                                </div>
+            <!-- Pagination -->
+            <nav th:if="${searchDto.pagination != null}" class="my-4" aria-label="...">
+                <ul class="pagination pagination-circle justify-content-center">
+                    <li th:if="${searchDto.pagination.existPrevPage}" class="page-item">
+                        <a class="page-link" href="javascript: void(0)" th:onclick="movePage(1)" tabindex="-1"
+                           aria-disabled="true">첫페이지</a>
+                        <a class="page-link" href="javascript: void(0)"
+                           th:onclick="movePage([[${(searchDto.pagination.startPage)-1}]])" tabindex="-1"
+                           aria-disabled="true">이전</a>
+                    </li>
+                    <li th:each="page : ${searchDto.pagination.pageList}"
+                        th:class="${page == searchDto.page} ? 'page-item active':'page-item'" aria-current="page">
+                        <a class="page-link" href="javascript: void(0)" th:onclick="movePage([[${page}]])"
+                           th:text="${page}"></a>
+                    </li>
+                    <li th:if="${searchDto.pagination.existNextPage}" class="page-item">
+                        <a class="page-link" href="javascript: void(0)"
+                           th:onclick="movePage([[${(searchDto.pagination.endPage)+1}]])">다음</a>
+                        <a class="page-link" href="javascript: void(0)"
+                           th:onclick="movePage([[${(searchDto.pagination.totalPageSize)}]])">마지막페이지</a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+        <div class="col-md-2">
+            <!--Section: Sidebar-->
+            <section class="sticky-top " style="top: 170px;">
+                <div>
+                    태그 목록
+                    <hr>
+                    <div class="tagList">
+                        <div class="d-flex flex-column align-items-start gap-1" th:unless="${hashtags.isEmpty()}">
+                            <a href="/post"
+                               th:style="${searchDto.hashtag == null || searchDto.hashtag == ''} ? 'color:#20C997;':''">전체보기</a>
+                            <div class="d-flex gap-1" th:each="hashtag:${hashtags}">
+                                <a href="javascript: void(0)"
+                                   th:style="${searchDto.hashtag != null} ? (${searchDto.hashtag == hashtag.name} ? 'color:#20C997;' : '') : ''"
+                                   th:onclick="searchViaTag([[${hashtag.name}]])" th:text="'#'+${hashtag.name}"></a>
+                                <span th:text="'(' + ${hashtag.count} +')'"></span>
                             </div>
                         </div>
                     </div>
-                </section>
-                <!--Section: Sidebar-->
-            </div>
+                </div>
+            </section>
+            <!--Section: Sidebar-->
         </div>
     </div>
 </th:block>

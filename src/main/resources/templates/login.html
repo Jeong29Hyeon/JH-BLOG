@@ -9,15 +9,15 @@
     <style>
         #loginDiv img{
             width: 300px;
-            height: 45px;
+            height: 80px;
         }
     </style>
 </th:block>
 <th:block layout:fragment="content">
-   <div id="loginDiv" th:if="${session.user == null}" class="d-flex flex-column align-items-center justify-content-center mt-5 gap-3">
-       <span>소셜 로그인</span>
-       <a href="/kakao-login"><img src="https://jhblogimage.s3.ap-northeast-2.amazonaws.com/images/kakao_btn.png" alt="카카오 로그인"></a>
-       <a href="/naver-login"><img src="https://jhblogimage.s3.ap-northeast-2.amazonaws.com/images/naver_btn.png" alt="네이버 로그인"></a>
+   <div id="loginDiv" style="height: 500px" th:if="${session.user == null}" class="d-flex flex-column align-items-center justify-content-center mt-5 gap-3">
+       <h3>소셜 로그인</h3>
+       <a href="/kakao-login"><img th:src="@{/images/kakao_btn.png}" alt="카카오 로그인"></a>
+       <a href="/naver-login"><img th:src="@{/images/naver_btn.png}" alt="네이버 로그인"></a>
    </div>
 </th:block>
 </html>

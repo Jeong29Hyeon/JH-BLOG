@@ -28,12 +28,15 @@
                             <img th:src="*{image}" alt="프로필" class="img-fluid rounded-9" style="max-height: 30px;">
                             <!-- 드롭다운 메뉴 -->
                             <div class="btn-group shadow-0">
-                            <button type="button" th:text="*{nickname}" class="btn btn-light dropdown-toggle"
-                                    data-mdb-toggle="dropdown" aria-expanded="false" style="font-size: 15px;">dropdown</button>
-                            <ul class="dropdown-menu text-center">
-                                <li><a class="dropdown-item" href="javascript: void(0);" th:onclick="openNameChangeModal([[${session.user.id}]])">닉네임 변경</a></li>
-                                <li><a class="dropdown-item" th:href="@{/logout}">로그아웃</a></li>
-                            </ul>
+                                <button type="button" th:text="*{nickname}" class="btn btn-light dropdown-toggle"
+                                        data-mdb-toggle="dropdown" aria-expanded="false" style="font-size: 15px;">
+                                    dropdown
+                                </button>
+                                <ul class="dropdown-menu text-center">
+                                    <li><a class="dropdown-item" href="javascript: void(0);"
+                                           th:onclick="openNameChangeModal([[${session.user.id}]])">닉네임 변경</a></li>
+                                    <li><a class="dropdown-item" th:href="@{/logout}">로그아웃</a></li>
+                                </ul>
                             </div>
                             <!-- 드롭다운 끝 -->
                         </div>
@@ -79,20 +82,16 @@
 </header>
 <!-- Navbar -->
 <!--Main layout-->
-<main class="my-5">
+<main class="my-5" style="min-height: 500px;">
     <div class="container">
-        <div class="row">
-            <div class="col mb-4">
-                <!--Section: Content-->
-                <th:block layout:fragment="content"></th:block>
-                <!--Section: Content-->
-            </div>
-        </div>
+        <!--Section: Content-->
+        <th:block layout:fragment="content"></th:block>
+        <!--Section: Content-->
     </div>
 </main>
 <!-- Copyright -->
 <div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.2);">
-    정현's 블로그
+    정현 블로그
 </div>
 <!-- Copyright -->
 <script th:src="@{/js/mdb.min.js}"></script>
@@ -103,7 +102,7 @@
 <script src="https://cdn.jsdelivr.net/npm/@yaireo/tagify/dist/tagify.polyfills.min.js"></script>
 <script th:inline="javascript">
     function openNameChangeModal(id) {
-        document.getElementById('changeNickname').setAttribute('onclick',`changeNickname(${id})`)
+        document.getElementById('changeNickname').setAttribute('onclick', `changeNickname(${id})`)
         $('#nameChangeModal').modal('show')
     }
 
@@ -111,7 +110,7 @@
         let nameInput = document.getElementById('nameInput');
         let nameRegex = /[a-z가-힣0-9]{3,12}/;
         const nickname = document.getElementById('nameInput');
-        if(!nameRegex.test(nameInput.value)) {
+        if (!nameRegex.test(nameInput.value)) {
             alert('올바른 닉네임을 적어주세요!')
             return false;
         }
@@ -121,12 +120,12 @@
             url: uri,
             type: 'patch',
             data: {
-                nickname : nickname.value
+                nickname: nickname.value
             },
             dataType: 'json',
-            async : false,
+            async: false,
             success: function (response) {
-                if(response.errorMsg) {
+                if (response.errorMsg) {
                     alert(response.errorMsg);
                     return false;
                 }

@@ -24,8 +24,8 @@
                </div>
                <div>
                    <label for="description">글 설명 추가</label>
-                   <input id="description" name="description" type="text" class="form-control" placeholder="이 포스트를 간단하게 표현해봐요!"
-                   maxlength="50">
+                   <textarea id="description" name="description" type="text" class="form-control" placeholder="이 포스트를 간단하게 표현해봐요!"
+                             maxlength="250"></textarea>
                </div>
                <div th:if="${hashtags == null}">
                    <label for="hashtag">해시태그 입력</label>

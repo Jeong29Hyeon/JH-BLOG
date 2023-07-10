@@ -9,6 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -23,7 +24,13 @@ import java.util.Map;
 public class NaverService {
     private final UserMapper userMapper;
 
-    public String getNaverAccessToken(String authorizeCode, String state) {
+    @Value("${social.naver.client-id}")
+    private String clientId;
+
+    @Value("${social.naver.secret-key}")
+    private String clientSecret;
+
+    public String getNaverAccessToken(String authorizeCode, String state, String redirectUrl) {
         String accessToken = "";
         String refreshToken = "";
         String reqUrl = "https://nid.naver.com/oauth2.0/token";
@@ -32,9 +39,9 @@ public class NaverService {
         //쿼리 스트링 설정
         UriComponents uri = UriComponentsBuilder.fromHttpUrl(reqUrl)
                 .queryParam("grant_type", "authorization_code")
-                .queryParam("client_id", "pcoAzgHoNqxyxgYcRFuv")
-                .queryParam("client_secret", "tLuZdqMWtg")
-                .queryParam("redirect_uri", "http://jeong29hyeon.org/login/oauth/naver")
+                .queryParam("client_id", clientId)
+                .queryParam("client_secret", clientSecret)
+                .queryParam("redirect_uri", redirectUrl+"/login/oauth/naver")
                 .queryParam("code", authorizeCode)
                 .queryParam("state", state)
                 .encode()

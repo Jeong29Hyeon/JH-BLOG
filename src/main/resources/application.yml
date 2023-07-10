@@ -6,6 +6,11 @@ spring:
       enabled: true
   profiles:
     include: dbsource,cloud
+  thymeleaf:
+    cache: false
+  devtools:
+    restart:
+      enabled: true
 mybatis:
   configuration:
     map-underscore-to-camel-case: true

@@ -8,6 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
@@ -22,8 +23,10 @@ import java.util.UUID;
 @Service
 public class KakaoService {
     private final UserMapper userMapper;
+    @Value("${social.kakao.client-id}")
+    private String clientId;
 
-    public String getKakaoAccesstoken(String authorizeCode) {
+    public String getKakaoAccesstoken(String authorizeCode,String redirectUrl) {
         String reqUrl = "https://kauth.kakao.com/oauth/token";
         RestTemplate restTemplate = new RestTemplate();
         //헤더 설정
@@ -32,8 +35,8 @@ public class KakaoService {
         //바디 설정
         MultiValueMap<String, String> body = new LinkedMultiValueMap<>();
         body.add("grant_type", "authorization_code");
-        body.add("client_id", "ff5fbe39cb292ecd96bd27eb8415bf9a");
-        body.add("redirect_uri", "http://jeong29hyeon.org/login/oauth/kakao");
+        body.add("client_id", clientId);
+        body.add("redirect_uri", redirectUrl+"/login/oauth/kakao");
         body.add("code", authorizeCode);
         //HttpHeaders 와 body를 담을 HttpEntity 생성
         HttpEntity<MultiValueMap<String, String>> httpEntity = new HttpEntity<>(body, headers);

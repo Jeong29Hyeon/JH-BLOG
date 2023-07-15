@@ -37,7 +37,7 @@
 
 <th:block layout:fragment="content">
     <div class="row">
-        <div class="col-md-10">
+        <div class="col-md-10 order-md-1 order-sm-2">
             <form id="searchForm">
                 <div class="input-group rounded my-3">
                     <div class="col-3 me-1">
@@ -135,19 +135,19 @@
                 </ul>
             </nav>
         </div>
-        <div class="col-md-2">
+        <div class="col-md-2 order-md-2 order-sm-1">
             <!--Section: Sidebar-->
-            <section class="sticky-top " style="top: 170px;">
+            <section class="sticky-top" style="top: 170px;">
                 <div>
                     태그 목록
                     <hr>
                     <div class="tagList">
                         <div class="d-flex flex-column align-items-start gap-1" th:unless="${hashtags.isEmpty()}">
                             <a href="/post"
-                               th:style="${searchDto.hashtag == null || searchDto.hashtag == ''} ? 'color:#20C997;':''">전체보기</a>
+                               th:style="${searchDto.hashtag == null || searchDto.hashtag == ''} ? 'color:#6578dc;':''">전체보기</a>
                             <div class="d-flex gap-1" th:each="hashtag:${hashtags}">
                                 <a href="javascript: void(0)"
-                                   th:style="${searchDto.hashtag != null} ? (${searchDto.hashtag == hashtag.name} ? 'color:#20C997;' : '') : ''"
+                                   th:style="${searchDto.hashtag != null && searchDto.hashtag == hashtag.name} ? 'color:#6578dc;': ''"
                                    th:onclick="searchViaTag([[${hashtag.name}]])" th:text="'#'+${hashtag.name}"></a>
                                 <span th:text="'(' + ${hashtag.count} +')'"></span>
                             </div>
